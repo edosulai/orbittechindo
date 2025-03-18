@@ -1,0 +1,103 @@
+Take Home Test: Web & Mobile Frontend Development
+
+Project Description
+You are tasked with building a Movie Exploration Application that allows users to search for
+movies, view detailed information, and visualize movie statistics. The app should consume the
+Open Movie Database (OMDb) API for retrieving movie data. Additionally, you will need to
+integrate data visualization to show insights such as the number of movies per genre or movie
+ratings distribution. The application should also feature user registration, login, and protected
+routes. For login and registration functionality, you are required to implement mock authentication
+(i.e., the login and registration forms do not need to be connected to a backend service, but
+should simulate the process and manage a user's logged-in state).
+
+Features to Build
+1. Homepage (Web & Mobile)
+   • Carousel:
+     Ο Display featured movies in a carousel format with their posters.
+   • Masonry List:
+     Ο Use a Masonry List layout for displaying movie posters
+   • Search Movies:
+     Ο Allow users to search for movies by title.
+     Ο Display search results with movie titles, release years, posters, and ratings.
+   • Filters:
+     Ο Type Filter: Allow users to filter movies by type (e.g., "Movie" or "Series").
+     Ο Year Range Filter: Allow users to filter movies based on a range of years (e.g.,
+       1990 to 2020). Include a slider or input fields for selecting the start and end
+       years.
+
+2. Movie Detail Page (Web & Mobile)
+   • When a movie is selected from the search results, show the movie's details:
+     Ο Movie poster, title, release year, genre(s), rating, plot, and cast.
+   • Data Visualization:
+     Ο Display a chart to visualize insights such as the number of movies per genre or
+       movie ratings distribution.
+
+3. User Registration Form (Web & Mobile)
+   • Create Registration Form:
+     Ο Include fields for name, email, password, and phone number.
+     Ο Use React Hook Form and Zod (preferred) for form validation. Alternatives like
+       Formik or Yup are also acceptable.
+   • Form Validation:
+     Ο Ensure that the form inputs are validated before submission (e.g., email format,
+       password strength).
+
+4. Login (Web & Mobile)
+   • Login Form:
+     Ο Allow users to log in with email and password.
+     Ο Mock Authentication: Implement mock login functionality (no need for real
+       backend login). Simulate a login process with a hardcoded username and
+       password for the purpose of this test.
+     Ο Protected Routes: Protect pages like Movie Detail or Favorites from
+       unauthorized users.
+     Ο Use JWT (JSON Web Token) or similar to simulate a token-based authentication
+       (mock) for protected routes.
+
+5. Global State Management
+   • Use Zustand (preferred) or Redux for global state management:
+     Ο Track user authentication status.
+     Ο Store movie data, search results, and selected filters.
+
+6. API Integration
+   • Open Movie Database (OMDb) API:
+     Ο Integrate with the OMDb API to fetch movie data (e.g., search movies, fetch
+       movie details, and list genres).
+     Ο Use TanStack Query (preferred) for data fetching and caching. Other libraries
+       like Axios or Fetch API are also acceptable.
+
+7. HTTP Interceptor
+   • Implement an HTTP Interceptor to manage API requests and handle authentication
+     tokens for secured routes.
+   • Error Handling:
+     Ο If an API request fails, show appropriate error messages (e.g., network issues or
+       incorrect search queries).
+
+Technology Specifications
+• Frontend: React, React Native (for mobile), Next.js (for web), TypeScript
+• Form Validation: React Hook Form, Zod (preferred), but alternatives like Formik or Yup
+  can be used.
+• State Management: Zustand (preferred) or Redux
+• API: Open Movie Database (OMDb) API, TanStack Query (preferred), but you can use
+  Axios or Fetch API if you prefer.
+• Data Visualization:
+  Ο Web: Recharts.js (preferred)
+  Ο Mobile: React Native Chart Kit / Victory Native (preferred for mobile), other
+    alternatives can be used.
+• Authentication: Mock Authentication: Simulate login and authentication, using mock
+  data and JWT-like tokens.
+
+Bonus (Optional)
+• Animations: Implement UI animations using Framer Motion or GSAP for smooth
+  transitions between pages or actions (e.g., when a movie is added to favorites).
+• Integrate push notifications for new movie releases or movie updates (mock data) using
+  Firebase Cloud Messaging (FCM) or OneSignal for React Native. This will keep users
+  engaged and notified of new content.
+
+Submission Requirements
+• Submit the code on GitHub
+• Provide brief documentation on how to run the app, the key features, and your technical
+  decisions (e.g., which state management solution you used, how you implemented data
+  fetching, etc.).
+
+Due Date: 5 days after receiving this take home test
+Submission code to github orbittechindo
+Prepare Demo during interview
