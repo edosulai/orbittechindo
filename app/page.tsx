@@ -1,23 +1,46 @@
 "use client";
 
-import React from 'react';
-import { useForm } from 'react-hook-form';
+import { useProtectedRoute } from '@/hooks';
+import { MovieFormData, movieSchema } from '@/schemas';
+import { fetchMovieByTitle } from '@/services';
+import { useAuthStore, useMovieStore } from '@/stores';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMovie } from '@/hooks';
-import { movieSchema, MovieFormData } from '@/schemas';
-import { useMovieStore } from '@/stores';
+import { useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
 
 const Page = () => {
+    const router = useRouter();
+    const logout = useAuthStore((state) => state.logout);
+
+    const { isAuthenticated } = useProtectedRoute();
     const { register, handleSubmit, formState: { errors } } = useForm<MovieFormData>({
         resolver: zodResolver(movieSchema),
     });
 
     const title = useMovieStore((state) => state.title);
     const setTitle = useMovieStore((state) => state.setTitle);
-    const { data, error, isLoading } = useMovie(title);
+    const { data, error, isLoading } = useQuery({
+        queryKey: ['search-movie', title],
+        queryFn: () => fetchMovieByTitle(title),
+        enabled: !!title,
+    });
+
+    if (isAuthenticated == undefined || isLoading) {
+        return <p>Loading...</p>;
+    }
+
+    if (!isAuthenticated) {
+        alert('You must be logged in to view this page');
+        return logout(router);
+    }
 
     const onSubmit = (data: MovieFormData) => {
         setTitle(data.title);
+    };
+
+    const handleMovieClick = (id: string) => {
+        router.push(`/movie/${id}`);
     };
 
     return (
@@ -35,7 +58,7 @@ const Page = () => {
             {isLoading && <p>Loading...</p>}
             {error && <p>Error fetching movie data</p>}
             {data && (
-                <div>
+                <div onClick={() => handleMovieClick(data.imdbID)}>
                     <h2>{data.Title}</h2>
                     <p><strong>Year:</strong> {data.Year}</p>
                     <p><strong>Rated:</strong> {data.Rated}</p>

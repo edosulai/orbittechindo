@@ -1,1 +1,1 @@
-export * from './useMovie';
+export * from './useProtectedRoute';

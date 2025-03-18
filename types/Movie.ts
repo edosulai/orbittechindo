@@ -1,3 +1,8 @@
+export interface MovieState {
+    title: string;
+    setTitle: (title: string) => void;
+}
+
 export interface MovieData {
     Title: string;
     Year: string;

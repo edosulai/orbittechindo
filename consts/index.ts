@@ -1,1 +1,2 @@
-export * from './apiConfig';
+export * from './omdb';
+export * from './auth';
