@@ -1,5 +1,6 @@
 "use client";
 
+import { Input } from '@/components';
 import { useProtectedRoute } from '@/hooks';
 import { MovieFormData, movieSchema } from '@/schemas';
 import { fetchMovieQuery } from '@/services';
@@ -8,10 +9,11 @@ import { MoviePoster } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
 import useEmblaCarousel from 'embla-carousel-react';
+import debounce from 'lodash.debounce';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect, useMemo } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import Masonry from 'react-masonry-css';
 
 import '../styles/embla.css';
@@ -19,19 +21,17 @@ import '../styles/embla.css';
 function Page() {
     const router = useRouter();
     const { isAuthenticated, authIsLoading } = useProtectedRoute();
-    const { register, handleSubmit, formState: { errors } } = useForm<MovieFormData>({
+    const { control, formState: { errors } } = useForm<MovieFormData>({
         resolver: zodResolver(movieSchema),
+        defaultValues: useMovieStore.getState(),
     });
 
-    const title = useMovieStore((state) => state.title);
-    const setTitle = useMovieStore((state) => state.setTitle);
-    const [typeFilter, setTypeFilter] = useState<string>('');
-    const [yearRange, setYearRange] = useState<[number, number]>([1990, 2020]);
+    const { title, typeFilter, yearRange, setTitle, setTypeFilter, setYearRange } = useMovieStore();
 
     const { data, error, isLoading } = useQuery({
         queryKey: ['search-movie', title, typeFilter, yearRange],
         queryFn: async () => {
-            const result = await fetchMovieQuery(title || 'all', typeFilter, yearRange);
+            const result = await fetchMovieQuery(title || 'all', typeFilter || '', yearRange, 1); // Add page parameter
             if (result.Response === 'False') {
                 throw new Error(result.Error);
             }
@@ -50,7 +50,7 @@ function Page() {
 
     const movieList = useMemo(() => Array.isArray(data) ? data.slice(5) : [], [data]);
 
-    if (authIsLoading || isLoading) {
+    if (authIsLoading) {
         return <p>Loading...</p>;
     }
 
@@ -59,13 +59,9 @@ function Page() {
         return null;
     }
 
-    const onSubmit = (data: MovieFormData) => {
-        setTitle(data.title);
-    };
-
-    const handleMovieClick = (id: string) => {
-        router.push(`/movie/${id}`);
-    };
+    const handleTitleChange = debounce((value: string) => {
+        setTitle(value);
+    }, 300);
 
     const handleTypeFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setTypeFilter(event.target.value);
@@ -77,29 +73,37 @@ function Page() {
         setYearRange(newRange as [number, number]);
     };
 
+    const handleMovieClick = (imdbID: string) => {
+        router.push(`/${imdbID}`);
+    };
+
     return (
         <div>
             <h1>OMDB Movie Search</h1>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <input
-                    type="text"
-                    {...register('title')}
-                    placeholder="Enter movie title"
+            <form>
+                <Controller
+                    name="title"
+                    control={control}
+                    render={({ field }) => (
+                        <Input
+                            type="text"
+                            {...field}
+                            onChange={(e) => {
+                                field.onChange(e);
+                                handleTitleChange(e.target.value);
+                            }}
+                        />
+                    )}
                 />
                 {errors.title && <p>{errors.title.message}</p>}
-                <button type="submit">Search</button>
-            </form>
 
-            <div>
                 <label>Type Filter:</label>
-                <select value={typeFilter} onChange={handleTypeFilterChange}>
+                <select value={typeFilter || ''} onChange={handleTypeFilterChange}>
                     <option value="">All</option>
                     <option value="movie">Movie</option>
                     <option value="series">Series</option>
                 </select>
-            </div>
 
-            <div>
                 <label>Year Range:</label>
                 <input
                     type="number"
@@ -115,13 +119,13 @@ function Page() {
                     min="1900"
                     max="2023"
                 />
-            </div>
+            </form>
 
             <div className="embla" ref={emblaRef}>
                 <div className="embla__container">
                     {movieList.slice(0, 5).map((movie: MoviePoster) => (
                         <div className="embla__slide" key={movie.imdbID} onClick={() => handleMovieClick(movie.imdbID)}>
-                            <Image src={movie.Poster} alt={movie.Title} width={200} height={300} />
+                            {movie.Poster.startsWith('http') && <Image src={movie.Poster} alt={movie.Title} width={200} height={300} />}
                             <p>{movie.Title}</p>
                         </div>
                     ))}
@@ -135,7 +139,7 @@ function Page() {
             >
                 {movieList.map((movie: MoviePoster) => (
                     <div key={movie.imdbID} onClick={() => handleMovieClick(movie.imdbID)}>
-                        <Image src={movie.Poster} alt={movie.Title} width={200} height={300} />
+                        {movie.Poster.startsWith('http') && <Image src={movie.Poster} alt={movie.Title} width={200} height={300} />}
                         <p>{movie.Title} ({movie.Year})</p>
                     </div>
                 ))}

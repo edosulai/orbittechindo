@@ -1,5 +1,5 @@
 import { API_KEY, OMDB_API_URL } from '@/consts';
-import { MovieData, MovieList } from '@/types';
+import { MovieData, MovieList, MovieRequest } from '@/types';
 import axios from 'axios';
 
 /**
@@ -7,22 +7,29 @@ import axios from 'axios';
  * @param {string} query - The search query for the movies.
  * @param {string} type - The type of the movie (e.g., "movie" or "series").
  * @param {number[]} yearRange - The range of years for the movies.
+ * @param {number} page - The page number for pagination.
  * @returns {Promise<MovieData[]>} - The list of movie data.
  * @throws {Error} - An error.
  * @example
- * const movies = await fetchMovieQuery('Guardians', 'movie', [1990, 2020]);
+ * const movies = await fetchMovieQuery('Guardians', 'movie', [1990, 2020], 1);
  */
-export async function fetchMovieQuery(query: string, type: string, yearRange: number[]) {
+export async function fetchMovieQuery(query: string, type: string, yearRange: number[], page: number = 1) {
     try {
-        const response = await axios.get<MovieList>(OMDB_API_URL, {
-            params: {
-                apikey: API_KEY,
-                s: query,
-                type: type,
-                y: `${yearRange[0]}-${yearRange[1]}`
-            }
-        });
-        return response.data
+        const params: MovieRequest = {
+            apikey: API_KEY,
+            type: type,
+            y: `${yearRange[0]}-${yearRange[1]}`,
+            page
+        };
+
+        if (query.length < 3) {
+            params.t = query; // Switch to title search
+        } else {
+            params.s = query; // Use search query
+        }
+
+        const response = await axios.get<MovieList>(OMDB_API_URL, { params });
+        return response.data;
     } catch (error) {
         console.error('Error fetching movie data:', error);
         throw error;

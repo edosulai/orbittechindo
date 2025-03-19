@@ -1,4 +1,4 @@
-export interface AuthState {
+export interface AuthStore {
     isAuthenticated: boolean;
     isLoading: boolean;
     tractAuth: () => void;

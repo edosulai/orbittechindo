@@ -1,8 +1,8 @@
-import { AuthState } from '@/types';
+import { AuthStore } from '@/types';
 import { verifyToken } from '@/utils';
 import { create } from 'zustand';
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthStore>((set) => ({
     isAuthenticated: false,
     isLoading: true,
     tractAuth: async () => {

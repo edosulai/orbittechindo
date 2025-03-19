@@ -51,6 +51,7 @@ function MovieDetailPage() {
 
     return (
         <div>
+            <button onClick={() => router.back()}>Back</button>
             <h1>{data.Title}</h1>
             <Image src={data.Poster} alt={data.Title} width={200} height={300} />
             <p><strong>Year:</strong> {data.Year}</p>
