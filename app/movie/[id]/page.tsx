@@ -3,6 +3,7 @@
 import { useProtectedRoute } from '@/hooks';
 import { fetchMovieById } from '@/services';
 import { useQuery } from '@tanstack/react-query';
+import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis } from 'recharts';
 
@@ -13,7 +14,15 @@ function MovieDetailPage() {
 
     const { data, error, isLoading } = useQuery({
         queryKey: ['detail-movie', id],
-        queryFn: () => fetchMovieById(id!.toString()),
+        queryFn: async () => {
+            const result = await fetchMovieById(id!.toString());
+            
+            if (result.Response === 'False') {
+                throw new Error(result.Error);
+            }
+
+            return result;
+        },
         enabled: !!id,
     });
 
@@ -27,7 +36,7 @@ function MovieDetailPage() {
     }
 
     if (error) {
-        return <p>Error fetching movie data</p>;
+        return <p>{error.message}</p>;
     }
 
     if (!data) {
@@ -43,7 +52,7 @@ function MovieDetailPage() {
     return (
         <div>
             <h1>{data.Title}</h1>
-            <img src={data.Poster} alt={data.Title} />
+            <Image src={data.Poster} alt={data.Title} width={200} height={300} />
             <p><strong>Year:</strong> {data.Year}</p>
             <p><strong>Genre:</strong> {data.Genre}</p>
             <p><strong>Rating:</strong> {data.imdbRating}</p>

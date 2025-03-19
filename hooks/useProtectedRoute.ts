@@ -5,7 +5,9 @@ export function useProtectedRoute() {
     const authIsLoading = useAuthStore((state) => state.isLoading);
     const tractAuth = useAuthStore((state) => state.tractAuth);
 
-    tractAuth();
+    if (typeof window !== 'undefined') {
+        tractAuth();
+    }
 
     return { isAuthenticated, authIsLoading };
 }

@@ -3,7 +3,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Geist, Geist_Mono } from 'next/font/google';
 import React from 'react';
-import './globals.css';
+
+import '../styles/globals.css';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
