@@ -19,7 +19,7 @@ const LoginPage = () => {
         if (data.email === MOCK_USER.email && data.password === MOCK_USER.password) {
             generateToken(data.email).then((token) => {
                 login(token);
-                router.push('/');
+                router.replace('/');
             }).catch((error) => {
                 console.error('Token generation failed', error);
                 alert('An error occurred. Please try again.');
@@ -35,12 +35,12 @@ const LoginPage = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label htmlFor="email">Email</label>
-                    <input id="email" type="email" {...register('email')} />
+                    <input id="email" type="email" {...register('email')} value={MOCK_USER.email} />
                     {errors.email && <p>{errors.email.message}</p>}
                 </div>
                 <div>
                     <label htmlFor="password">Password</label>
-                    <input id="password" type="password" {...register('password')} />
+                    <input id="password" type="password" {...register('password')} value={MOCK_USER.password} />
                     {errors.password && <p>{errors.password.message}</p>}
                 </div>
                 <button type="submit">Login</button>

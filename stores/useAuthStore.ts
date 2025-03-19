@@ -1,16 +1,24 @@
 import { AuthState } from '@/types';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { verifyToken } from '@/utils';
 import { create } from 'zustand';
 
 export const useAuthStore = create<AuthState>((set) => ({
     isAuthenticated: false,
+    isLoading: true,
+    tractAuth: async () => {
+        let isAuthenticated = false;
+
+        const token = localStorage.getItem('token');  
+        if (token) {
+            isAuthenticated = await verifyToken(token)
+        }
+
+        set({ isLoading: false, isAuthenticated: isAuthenticated });
+    },
     login: (token: string) => {
         localStorage.setItem('token', token);
-        set({ isAuthenticated: true });
     },
-    logout: (router: AppRouterInstance) => {
+    logout: () => {
         localStorage.removeItem('token');
-        set({ isAuthenticated: false });
-        router.push('/login');
     },
 }));

@@ -3,17 +3,16 @@
 import { useProtectedRoute } from '@/hooks';
 import { MovieFormData, movieSchema } from '@/schemas';
 import { fetchMovieByTitle } from '@/services';
-import { useAuthStore, useMovieStore } from '@/stores';
+import { useMovieStore } from '@/stores';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
-const Page = () => {
+function Page() {
     const router = useRouter();
-    const logout = useAuthStore((state) => state.logout);
+    const {isAuthenticated, authIsLoading} = useProtectedRoute();
 
-    const { isAuthenticated } = useProtectedRoute();
     const { register, handleSubmit, formState: { errors } } = useForm<MovieFormData>({
         resolver: zodResolver(movieSchema),
     });
@@ -26,13 +25,13 @@ const Page = () => {
         enabled: !!title,
     });
 
-    if (isAuthenticated == undefined || isLoading) {
+    if (authIsLoading || isLoading) {
         return <p>Loading...</p>;
     }
 
     if (!isAuthenticated) {
-        alert('You must be logged in to view this page');
-        return logout(router);
+        router.replace('/login');
+        return null;
     }
 
     const onSubmit = (data: MovieFormData) => {
@@ -80,6 +79,6 @@ const Page = () => {
             )}
         </div>
     );
-};
+}
 
 export default Page;

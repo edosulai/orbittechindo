@@ -2,30 +2,28 @@
 
 import { useProtectedRoute } from '@/hooks';
 import { fetchMovieById } from '@/services';
-import { useAuthStore } from '@/stores';
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
 import { Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis } from 'recharts';
 
-const MovieDetailPage = () => {
+function MovieDetailPage() {
     const router = useRouter();
     const { id } = useParams();
-    const logout = useAuthStore((state) => state.logout);
+    const {isAuthenticated, authIsLoading} = useProtectedRoute();
 
-    const { isAuthenticated } = useProtectedRoute();
     const { data, error, isLoading } = useQuery({
         queryKey: ['detail-movie', id],
         queryFn: () => fetchMovieById(id!.toString()),
         enabled: !!id,
     });
 
-    if (isAuthenticated == undefined || isLoading) {
+    if (authIsLoading || isLoading) {
         return <p>Loading...</p>;
     }
 
     if (!isAuthenticated) {
-        alert('You must be logged in to view this page');
-        return logout(router);
+        router.replace('/login');
+        return null;
     }
 
     if (error) {
@@ -73,6 +71,6 @@ const MovieDetailPage = () => {
             </BarChart>
         </div>
     );
-};
+}
 
 export default MovieDetailPage;

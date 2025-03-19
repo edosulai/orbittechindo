@@ -1,7 +1,7 @@
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-
 export interface AuthState {
     isAuthenticated: boolean;
+    isLoading: boolean;
+    tractAuth: () => void;
     login: (token: string) => void;
-    logout: (router: AppRouterInstance) => void;
+    logout: () => void;
 }
