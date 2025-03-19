@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { Button } from '../atoms';
-import { InputWithLabel } from '../molecules';
+import { InputWithLabel } from '.';
 
 export function SignupForm() {
     const { register, handleSubmit, formState: { errors } } = useForm<SignupFormData>({

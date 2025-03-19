@@ -1,16 +1,17 @@
 "use client";
 
+import { GenreDistribution, RatingsDistribution } from '@/components';
+import { Button } from '@/components/atoms/Button';
 import { useProtectedRoute } from '@/hooks';
 import { fetchMovieById } from '@/services';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import { Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis } from 'recharts';
 
 function MovieDetailPage() {
     const router = useRouter();
     const { id } = useParams();
-    const {isAuthenticated, authIsLoading} = useProtectedRoute();
+    const { isAuthenticated, authIsLoading } = useProtectedRoute();
 
     const { data, error, isLoading } = useQuery({
         queryKey: ['detail-movie', id],
@@ -51,7 +52,7 @@ function MovieDetailPage() {
 
     return (
         <div>
-            <button onClick={() => router.back()}>Back</button>
+            <Button onClick={() => router.back()}>Back</Button>
             <h1>{data.Title}</h1>
             <Image src={data.Poster} alt={data.Title} width={200} height={300} />
             <p><strong>Year:</strong> {data.Year}</p>
@@ -61,24 +62,10 @@ function MovieDetailPage() {
             <p><strong>Cast:</strong> {data.Actors}</p>
 
             <h2>Genre Distribution</h2>
-            <BarChart width={600} height={300} data={genreData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="genre" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="count" fill="#8884d8" />
-            </BarChart>
+            <GenreDistribution data={genreData} />
 
             <h2>Ratings Distribution</h2>
-            <BarChart width={600} height={300} data={ratingData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="source" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="value" fill="#82ca9d" />
-            </BarChart>
+            <RatingsDistribution data={ratingData} />
         </div>
     );
 }

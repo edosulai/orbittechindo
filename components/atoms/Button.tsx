@@ -2,12 +2,11 @@
 
 import React, { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
 
-export function Button({
-    children,
-    ...rest
-}: DetailedHTMLProps<
+export type ButtonProps = DetailedHTMLProps<
     ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
->) {
-    return <button {...rest}>{children}</button>;
+>;
+
+export function Button({ ...rest }: ButtonProps) {
+    return <button {...rest} />;
 }

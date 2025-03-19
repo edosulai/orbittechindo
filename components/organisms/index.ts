@@ -1,3 +1,4 @@
 export * from './AuthHeader';
-export * from './LoginForm';
-export * from './SignupForm';
+export * from './MovieList';
+export * from './Carousel';
+export * from './Charts';
