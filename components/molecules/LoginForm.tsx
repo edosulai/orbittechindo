@@ -41,22 +41,31 @@ export function LoginForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
             <InputWithLabel
                 label="Email"
                 value={MOCK_USER.email}
                 {...register('email')}
             >
-                {errors.email && <p>{errors.email.message}</p>}
+                {errors.email && (
+                    <p className="text-red-500">{errors.email.message}</p>
+                )}
             </InputWithLabel>
             <InputWithLabel
                 label="Password"
                 value={MOCK_USER.password}
                 {...register('password')}
             >
-                {errors.password && <p>{errors.password.message}</p>}
+                {errors.password && (
+                    <p className="text-red-500">{errors.password.message}</p>
+                )}
             </InputWithLabel>
-            <Button type='submit'>Login</Button>
+            <Button
+                type="submit"
+                className="bg-foreground text-background hover:bg-[#383838] dark:hover:bg-[#ccc]"
+            >
+                Login
+            </Button>
         </form>
     );
 }
