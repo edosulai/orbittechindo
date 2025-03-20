@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Carousel, Footer, MovieList, SearchForm } from '@/components';
+import { Carousel, Footer, MovieHeader, MovieList } from '@/components';
 import { useProtectedRoute } from '@/hooks';
 import { MovieFormData, movieSchema } from '@/schemas';
 import { fetchMovieQuery } from '@/services';
@@ -21,12 +21,24 @@ function Page() {
         defaultValues: useMovieStore.getState(),
     });
 
-    const { title, typeFilter, yearRange, setTitle, setTypeFilter, setYearRange } = useMovieStore();
+    const {
+        title,
+        typeFilter,
+        yearRange,
+        setTitle,
+        setTypeFilter,
+        setYearRange,
+    } = useMovieStore();
     const [movies, setMovies] = useState<MoviePoster[]>([]);
     const loadMoreRef = useRef(null);
 
     const fetchMovies = async ({ pageParam = 1 }) => {
-        const result = await fetchMovieQuery(title || 'all', typeFilter || '', yearRange, pageParam);
+        const result = await fetchMovieQuery(
+            title || 'all',
+            typeFilter || '',
+            yearRange,
+            pageParam,
+        );
         if (result.Response === 'False') {
             throw new Error(result.Error);
         }
@@ -59,11 +71,15 @@ function Page() {
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
-                if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+                if (
+                    entries[0].isIntersecting &&
+                    hasNextPage &&
+                    !isFetchingNextPage
+                ) {
                     fetchNextPage();
                 }
             },
-            { threshold: 1 }
+            { threshold: 1 },
         );
 
         if (loadMoreRef.current) observer.observe(loadMoreRef.current);
@@ -74,7 +90,8 @@ function Page() {
     useEffect(() => {
         const handleScroll = () => {
             if (
-                window.innerHeight + window.scrollY >= document.body.offsetHeight - 10 &&
+                window.innerHeight + window.scrollY >=
+                    document.body.offsetHeight - 10 &&
                 hasNextPage &&
                 !isFetchingNextPage
             ) {
@@ -98,14 +115,14 @@ function Page() {
         setTitle(value);
     }, 300);
 
-    const handleTypeFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleTypeFilterChange = (
+        event: React.ChangeEvent<HTMLSelectElement>,
+    ) => {
         setTypeFilter(event.target.value);
     };
 
-    const handleYearRangeChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
-        const newRange = [...yearRange];
-        newRange[index] = parseInt(event.target.value, 10);
-        setYearRange(newRange as [number, number]);
+    const handleYearRangeChange = (value: [number, number]) => {
+        setYearRange(value);
     };
 
     const handleMovieClick = (imdbID: string) => {
@@ -114,23 +131,27 @@ function Page() {
 
     return (
         <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+            <FormProvider {...methods}>
+                <MovieHeader
+                    typeFilter={typeFilter}
+                    yearRange={yearRange}
+                    handleTitleChange={handleTitleChange}
+                    handleTypeFilterChange={handleTypeFilterChange}
+                    handleYearRangeChange={handleYearRangeChange}
+                />
+            </FormProvider>
             <main className="flex flex-col gap-[32px] row-start-2 items-center justify-center">
-                <FormProvider {...methods}>
-                    <SearchForm
-                        typeFilter={typeFilter}
-                        yearRange={yearRange}
-                        handleTitleChange={handleTitleChange}
-                        handleTypeFilterChange={handleTypeFilterChange}
-                        handleYearRangeChange={handleYearRangeChange}
-                    />
-                </FormProvider>
-
-                <Carousel list={movies.slice(0, 5)} handleMovieClick={handleMovieClick} />
+                <Carousel
+                    list={movies.slice(0, 5)}
+                    handleMovieClick={handleMovieClick}
+                />
                 <MovieList list={movies} handleMovieClick={handleMovieClick} />
 
                 {isLoading && <p>Loading...</p>}
                 {error && <p>{error.message}</p>}
-                {hasNextPage && <div ref={loadMoreRef} style={{ height: "50px" }} />}
+                {hasNextPage && (
+                    <div ref={loadMoreRef} style={{ height: '50px' }} />
+                )}
             </main>
             {!hasNextPage && <Footer />}
         </div>

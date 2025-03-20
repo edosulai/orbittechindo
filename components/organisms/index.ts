@@ -1,4 +1,4 @@
-export * from './Header';
+export * from './MovieHeader';
 export * from './MovieList';
 export * from './Carousel';
 export * from './Footer';
