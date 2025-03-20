@@ -1,26 +1,27 @@
 'use client';
 
-import Image from 'next/image';
-import Masonry from 'react-masonry-css';
 import { MoviePoster } from '@/types';
+import Masonry from 'react-masonry-css';
+import { MovieCard } from '../molecules';
 
 interface MovieListProps {
-    movieList: MoviePoster[];
+    list: MoviePoster[];
     handleMovieClick: (imdbID: string) => void;
 }
 
-export function MovieList({ movieList, handleMovieClick }: MovieListProps) {
+export function MovieList({ list, handleMovieClick }: MovieListProps) {
     return (
         <Masonry
             breakpointCols={3}
-            className="my-masonry-grid"
-            columnClassName="my-masonry-grid_column"
+            className="flex gap-2 w-fit"
+            columnClassName="w-full flex flex-col gap-2 w-fit"
         >
-            {movieList.map((movie) => (
-                <div key={movie.imdbID} onClick={() => handleMovieClick(movie.imdbID)}>
-                    {movie.Poster.startsWith('http') && <Image src={movie.Poster} alt={movie.Title} width={200} height={300} />}
-                    <p>{movie.Title} ({movie.Year})</p>
-                </div>
+            {list.map((movie, i) => (
+                <MovieCard
+                    key={i}
+                    movie={movie}
+                    handleMovieClick={handleMovieClick}
+                />
             ))}
         </Masonry>
     );

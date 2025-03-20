@@ -12,8 +12,6 @@ import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import '../styles/embla.css';
-
 function Page() {
     const router = useRouter();
     const { isAuthenticated, authIsLoading } = useProtectedRoute();
@@ -36,7 +34,8 @@ function Page() {
         enabled: true,
     });
 
-    const movieList = useMemo(() => Array.isArray(data) ? data.slice(5) : [], [data]);
+    const movieList = useMemo(() => Array.isArray(data) ? data: [], [data]);
+    const carouselList = useMemo(() => movieList.slice(0,5), [movieList]);
 
     if (authIsLoading) {
         return <p>Loading...</p>;
@@ -66,8 +65,7 @@ function Page() {
     };
 
     return (
-        <div>
-            <h1>OMDB Movie Search</h1>
+        <div className='max-w-3xl flex flex-col items-center'>
             <FormProvider {...methods}>
                 <SearchForm
                     typeFilter={typeFilter}
@@ -78,9 +76,8 @@ function Page() {
                 />
             </FormProvider>
 
-            <Carousel movieList={movieList} handleMovieClick={handleMovieClick} />
-
-            <MovieList movieList={movieList} handleMovieClick={handleMovieClick} />
+            <Carousel list={carouselList} handleMovieClick={handleMovieClick} />
+            <MovieList list={movieList} handleMovieClick={handleMovieClick} />
 
             {isLoading && <p>Loading...</p>}
             {error && <p>{error.message}</p>}

@@ -1,32 +1,33 @@
 'use client';
 
-import Image from 'next/image';
+import { MoviePoster } from '@/types';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useEffect } from 'react';
-import { MoviePoster } from '@/types';
+import { MovieCard } from '../molecules';
 
 interface CarouselProps {
-    movieList: MoviePoster[];
+    list: MoviePoster[];
     handleMovieClick: (imdbID: string) => void;
 }
 
-export function Carousel({ movieList, handleMovieClick }: CarouselProps) {
+export function Carousel({ list, handleMovieClick }: CarouselProps) {
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
 
     useEffect(() => {
         if (emblaApi) {
             emblaApi.reInit();
         }
-    }, [movieList, emblaApi]);
+    }, [list, emblaApi]);
 
     return (
-        <div className="embla" ref={emblaRef}>
-            <div className="embla__container">
-                {movieList.slice(0, 5).map((movie) => (
-                    <div className="embla__slide" key={movie.imdbID} onClick={() => handleMovieClick(movie.imdbID)}>
-                        {movie.Poster.startsWith('http') && <Image src={movie.Poster} alt={movie.Title} width={200} height={300} />}
-                        <p>{movie.Title}</p>
-                    </div>
+        <div className="overflow-hidden" ref={emblaRef}>
+            <div className="flex">
+                {list.slice(0, 5).map((movie, i) => (
+                    <MovieCard
+                        key={i}
+                        movie={movie}
+                        handleMovieClick={handleMovieClick}
+                    />
                 ))}
             </div>
         </div>
