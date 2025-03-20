@@ -65,23 +65,25 @@ function Page() {
     };
 
     return (
-        <div className='max-w-3xl flex flex-col items-center'>
-            <FormProvider {...methods}>
-                <SearchForm
-                    typeFilter={typeFilter}
-                    yearRange={yearRange}
-                    handleTitleChange={handleTitleChange}
-                    handleTypeFilterChange={handleTypeFilterChange}
-                    handleYearRangeChange={handleYearRangeChange}
-                />
-            </FormProvider>
+        <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+            <main className="flex flex-col gap-[32px] row-start-2 items-center justify-center">
+                <FormProvider {...methods}>
+                    <SearchForm
+                        typeFilter={typeFilter}
+                        yearRange={yearRange}
+                        handleTitleChange={handleTitleChange}
+                        handleTypeFilterChange={handleTypeFilterChange}
+                        handleYearRangeChange={handleYearRangeChange}
+                    />
+                </FormProvider>
 
-            <Carousel list={carouselList} handleMovieClick={handleMovieClick} />
-            <MovieList list={movieList} handleMovieClick={handleMovieClick} />
+                <Carousel list={carouselList} handleMovieClick={handleMovieClick} />
+                <MovieList list={movieList} handleMovieClick={handleMovieClick} />
 
-            {isLoading && <p>Loading...</p>}
-            {error && <p>{error.message}</p>}
-            {movieList.length === 0 && <p>No movies found</p>}
+                {isLoading && <p>Loading...</p>}
+                {error && <p>{error.message}</p>}
+                {movieList.length === 0 && <p>No movies found</p>}
+            </main>
         </div>
     );
 }

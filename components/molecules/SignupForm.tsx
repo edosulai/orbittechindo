@@ -4,8 +4,7 @@ import { SignupFormData, signupSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { Button } from '../atoms';
-import { InputWithLabel } from '.';
+import { Button, Input } from '../atoms';
 
 export function SignupForm() {
     const {
@@ -26,32 +25,31 @@ export function SignupForm() {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-            <InputWithLabel label="Name" {...register('name')}>
-                {errors.name && (
-                    <p className="text-red-500">{errors.name.message}</p>
-                )}
-            </InputWithLabel>
-            <InputWithLabel label="Email" {...register('email')}>
-                {errors.email && (
-                    <p className="text-red-500">{errors.email.message}</p>
-                )}
-            </InputWithLabel>
-            <InputWithLabel label="Password" {...register('password')}>
-                {errors.password && (
-                    <p className="text-red-500">{errors.password.message}</p>
-                )}
-            </InputWithLabel>
-            <InputWithLabel label="Phone Number" {...register('phone')}>
-                {errors.phone && (
-                    <p className="text-red-500">{errors.phone.message}</p>
-                )}
-            </InputWithLabel>
-            <Button
-                type="submit"
-                className="bg-foreground text-background hover:bg-[#383838] dark:hover:bg-[#ccc]"
-            >
-                Signup
-            </Button>
+            <Input type="text" placeholder="Username" {...register('name')} />
+            {errors.name && (
+                <p className="text-red-500">{errors.name.message}</p>
+            )}
+            <Input type="email" placeholder="Email" {...register('email')} />
+            {errors.email && (
+                <p className="text-red-500">{errors.email.message}</p>
+            )}
+            <Input
+                type="password"
+                placeholder="Password"
+                {...register('password')}
+            />
+            {errors.password && (
+                <p className="text-red-500">{errors.password.message}</p>
+            )}
+            <Input
+                type="text"
+                placeholder="Phone Number"
+                {...register('phone')}
+            />
+            {errors.phone && (
+                <p className="text-red-500">{errors.phone.message}</p>
+            )}
+            <Button type="submit">Signup</Button>
         </form>
     );
 }

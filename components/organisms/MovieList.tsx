@@ -12,7 +12,7 @@ interface MovieListProps {
 export function MovieList({ list, handleMovieClick }: MovieListProps) {
     return (
         <Masonry
-            breakpointCols={3}
+            breakpointCols={5}
             className="flex gap-2 w-fit"
             columnClassName="w-full flex flex-col gap-2 w-fit"
         >

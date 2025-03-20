@@ -20,7 +20,7 @@ export function Carousel({ list, handleMovieClick }: CarouselProps) {
     }, [list, emblaApi]);
 
     return (
-        <div className="overflow-hidden" ref={emblaRef}>
+        <div className="overflow-hidden w-fit" ref={emblaRef}>
             <div className="flex">
                 {list.slice(0, 5).map((movie, i) => (
                     <MovieCard

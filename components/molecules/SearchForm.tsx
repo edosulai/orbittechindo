@@ -19,17 +19,17 @@ export function SearchForm({
     handleTypeFilterChange,
     handleYearRangeChange,
 }: SearchFormProps) {
-    const { control, formState: { errors } } = useFormContext<MovieFormData>();
+    const { control } = useFormContext<MovieFormData>();
 
     return (
-        <form>
+        <form className="flex flex-col gap-4">
             <Controller
                 name="title"
                 control={control}
                 render={({ field }) => (
                     <Input
-                        type="text"
                         {...field}
+                        placeholder="Search by title"
                         onChange={(e) => {
                             field.onChange(e);
                             handleTitleChange(e.target.value);
@@ -37,30 +37,28 @@ export function SearchForm({
                     />
                 )}
             />
-            {errors.title && <p>{errors.title.message}</p>}
-
-            <Label>Type Filter:</Label>
-            <Select value={typeFilter || ''} onChange={handleTypeFilterChange}>
+            <Label htmlFor="typeFilter">Type</Label>
+            <Select id="typeFilter" value={typeFilter} onChange={handleTypeFilterChange}>
                 <option value="">All</option>
                 <option value="movie">Movie</option>
                 <option value="series">Series</option>
+                <option value="episode">Episode</option>
             </Select>
-
-            <Label>Year Range:</Label>
-            <Input
-                type="number"
-                value={yearRange[0]}
-                onChange={(e) => handleYearRangeChange(e, 0)}
-                min="1900"
-                max="2023"
-            />
-            <Input
-                type="number"
-                value={yearRange[1]}
-                onChange={(e) => handleYearRangeChange(e, 1)}
-                min="1900"
-                max="2023"
-            />
+            <Label>Year Range</Label>
+            <div className="flex gap-2">
+                <Input
+                    type="number"
+                    value={yearRange[0]}
+                    onChange={(e) => handleYearRangeChange(e, 0)}
+                    placeholder="From"
+                />
+                <Input
+                    type="number"
+                    value={yearRange[1]}
+                    onChange={(e) => handleYearRangeChange(e, 1)}
+                    placeholder="To"
+                />
+            </div>
         </form>
     );
 }
