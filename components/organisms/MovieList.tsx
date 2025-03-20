@@ -11,18 +11,21 @@ interface MovieListProps {
 
 export function MovieList({ list, handleMovieClick }: MovieListProps) {
     return (
-        <Masonry
-            breakpointCols={5}
-            className="flex gap-2 w-fit"
-            columnClassName="w-full flex flex-col gap-2 w-fit"
-        >
-            {list.map((movie, i) => (
-                <MovieCard
-                    key={i}
-                    movie={movie}
-                    handleMovieClick={handleMovieClick}
-                />
-            ))}
-        </Masonry>
+        <>
+            <Masonry
+                breakpointCols={5}
+                className="flex gap-2 w-fit"
+                columnClassName="w-full flex flex-col gap-2 w-fit"
+            >
+                {list.map((movie, i) => (
+                    <MovieCard
+                        key={i}
+                        movie={movie}
+                        handleMovieClick={handleMovieClick}
+                    />
+                ))}
+            </Masonry>
+            {list.length === 0 && <p>No movies found</p>}
+        </>
     );
 }

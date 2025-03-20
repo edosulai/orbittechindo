@@ -1,15 +1,16 @@
 "use client";
 
-import { Carousel, MovieList, SearchForm } from '@/components';
+import { Carousel, Footer, MovieList, SearchForm } from '@/components';
 import { useProtectedRoute } from '@/hooks';
 import { MovieFormData, movieSchema } from '@/schemas';
 import { fetchMovieQuery } from '@/services';
 import { useMovieStore } from '@/stores';
+import { MoviePoster } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import debounce from 'lodash.debounce';
 import { useRouter } from 'next/navigation';
-import { useMemo } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 function Page() {
@@ -21,21 +22,68 @@ function Page() {
     });
 
     const { title, typeFilter, yearRange, setTitle, setTypeFilter, setYearRange } = useMovieStore();
+    const [movies, setMovies] = useState<MoviePoster[]>([]);
+    const loadMoreRef = useRef(null);
 
-    const { data, error, isLoading } = useQuery({
+    const fetchMovies = async ({ pageParam = 1 }) => {
+        const result = await fetchMovieQuery(title || 'all', typeFilter || '', yearRange, pageParam);
+        if (result.Response === 'False') {
+            throw new Error(result.Error);
+        }
+        return result.Search || [];
+    };
+
+    const {
+        data,
+        error,
+        isLoading,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+    } = useInfiniteQuery({
         queryKey: ['search-movie', title, typeFilter, yearRange],
-        queryFn: async () => {
-            const result = await fetchMovieQuery(title || 'all', typeFilter || '', yearRange, 1);
-            if (result.Response === 'False') {
-                throw new Error(result.Error);
-            }
-            return result.Search || [];
+        queryFn: fetchMovies,
+        getNextPageParam: (lastPage, allPages) => {
+            return lastPage.length ? allPages.length + 1 : undefined;
         },
+        initialPageParam: 1,
         enabled: true,
     });
 
-    const movieList = useMemo(() => Array.isArray(data) ? data: [], [data]);
-    const carouselList = useMemo(() => movieList.slice(0,5), [movieList]);
+    useEffect(() => {
+        if (data) {
+            setMovies(data.pages.flat());
+        }
+    }, [data]);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+                    fetchNextPage();
+                }
+            },
+            { threshold: 1 }
+        );
+
+        if (loadMoreRef.current) observer.observe(loadMoreRef.current);
+
+        return () => observer.disconnect();
+    }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (
+                window.innerHeight + window.scrollY >= document.body.offsetHeight - 10 &&
+                hasNextPage &&
+                !isFetchingNextPage
+            ) {
+                fetchNextPage();
+            }
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
     if (authIsLoading) {
         return <p>Loading...</p>;
@@ -77,13 +125,14 @@ function Page() {
                     />
                 </FormProvider>
 
-                <Carousel list={carouselList} handleMovieClick={handleMovieClick} />
-                <MovieList list={movieList} handleMovieClick={handleMovieClick} />
+                <Carousel list={movies.slice(0, 5)} handleMovieClick={handleMovieClick} />
+                <MovieList list={movies} handleMovieClick={handleMovieClick} />
 
                 {isLoading && <p>Loading...</p>}
                 {error && <p>{error.message}</p>}
-                {movieList.length === 0 && <p>No movies found</p>}
+                {hasNextPage && <div ref={loadMoreRef} style={{ height: "50px" }} />}
             </main>
+            {!hasNextPage && <Footer />}
         </div>
     );
 }

@@ -26,10 +26,10 @@ export function MovieCard({ movie, handleMovieClick }: MovieCardProps) {
                     className="rounded-md"
                 />
                 <div className="absolute min-h-14 bottom-0 bg-gradient-to-t from-gray-900 dark:from-gray-800 to-transparent w-full rounded-b-lg p-2">
-                    <h3 className="mt-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
+                    <h6 className="mt-2 text-sm font-semibold text-gray-900 dark:text-gray-100">
                         {movie.Title}
-                    </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    </h6>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
                         {movie.Year}
                     </p>
                 </div>
