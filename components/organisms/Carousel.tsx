@@ -1,15 +1,10 @@
 'use client';
 
-import { MoviePoster } from '@/types';
+import { CarouselProps } from '@/types';
 import useEmblaCarousel from 'embla-carousel-react';
+import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { MovieCard } from '../molecules';
-import { motion } from 'framer-motion';
-
-interface CarouselProps {
-    list: MoviePoster[];
-    handleMovieClick: (imdbID: string) => void;
-}
 
 export function Carousel({ list, handleMovieClick }: CarouselProps) {
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });

@@ -1,11 +1,3 @@
-import { MovieFormData } from "@/schemas";
-
-export interface MovieDataStore extends MovieFormData {
-  setTitle: (title: string) => void;
-  setTypeFilter: (typeFilter: string) => void;
-  setYearRange: (yearRange: [number, number]) => void;
-}
-
 export interface MovieRequest {
   apikey: string;
   type: string;
@@ -50,7 +42,7 @@ export interface MoviePoster {
   Type: string;
 }
 
-export interface Masonry extends FailedResponse {
+export interface MovieList extends FailedResponse {
   Search?: MoviePoster[];
 }
 

@@ -1,2 +1,2 @@
-export * from './omdb';
-export * from './auth';
+export * from './config';
+export * from './component';

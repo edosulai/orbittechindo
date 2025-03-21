@@ -1,11 +1,6 @@
 'use client';
 
-import {
-    Carousel,
-    Footer,
-    Masonry,
-    MovieHeader
-} from '@/components';
+import { Carousel, Footer, Masonry, MovieHeader } from '@/components';
 import { useProtectedRoute } from '@/hooks';
 import { MovieFormData, movieSchema } from '@/schemas';
 import { fetchMovieQuery } from '@/services';
@@ -109,7 +104,7 @@ function Page() {
 
     const { isAuthenticated, authIsLoading, logout } = useProtectedRoute();
     if (!authIsLoading && !isAuthenticated) {
-        logout()
+        logout();
     }
 
     const handleTitleChange = debounce((value: string) => {

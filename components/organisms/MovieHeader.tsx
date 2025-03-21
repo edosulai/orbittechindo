@@ -1,18 +1,11 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { DatePicker, Input, Select, Button } from '../atoms';
-import Image from 'next/image';
 import { useAuthStore } from '@/stores';
-
-export interface MovieHeaderProps {
-    typeFilter?: string;
-    yearRange: [number, number];
-    handleTitleChange: (title: string) => void;
-    handleTypeFilterChange: (type: string) => void;
-    handleYearRangeChange: (range: [number, number]) => void;
-}
+import { MovieHeaderProps } from '@/types';
+import Image from 'next/image';
+import { useEffect, useRef, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { Button, DatePicker, Input, Select } from '../atoms';
 
 export function MovieHeader({
     typeFilter,

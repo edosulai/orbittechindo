@@ -1,11 +1,6 @@
 'use client';
 
-import { DetailedHTMLProps, SelectHTMLAttributes } from 'react';
-
-export type SelectProps = DetailedHTMLProps<
-    SelectHTMLAttributes<HTMLSelectElement>,
-    HTMLSelectElement
->;
+import { SelectProps } from '@/types';
 
 export function Select({ className, ...props }: SelectProps) {
     return (

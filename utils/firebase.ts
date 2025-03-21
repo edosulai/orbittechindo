@@ -1,17 +1,8 @@
+import { FIREBASE_CONFIG } from '@/consts';
 import { getApp, getApps, initializeApp } from 'firebase/app';
 import { getMessaging, getToken, isSupported } from 'firebase/messaging';
 
-const firebaseConfig = {
-    apiKey: undefined,
-    authDomain: undefined,
-    projectId: undefined,
-    storageBucket: undefined,
-    messagingSenderId: undefined,
-    appId: undefined,
-    measurementId: undefined,
-};
-
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+const app = getApps().length === 0 ? initializeApp(FIREBASE_CONFIG) : getApp();
 
 const messaging = async () => {
     const supported = await isSupported();

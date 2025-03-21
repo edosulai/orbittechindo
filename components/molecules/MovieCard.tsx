@@ -1,14 +1,9 @@
 'use client';
 
 import { useValidImage } from '@/hooks';
-import { MoviePoster } from '@/types';
+import { MovieCardProps } from '@/types';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-
-interface MovieCardProps {
-    movie: MoviePoster;
-    handleMovieClick: (imdbID: string) => void;
-}
 
 export function MovieCard({ movie, handleMovieClick }: MovieCardProps) {
     const isValidImage = useValidImage(movie.Poster);

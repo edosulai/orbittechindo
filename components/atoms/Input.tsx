@@ -1,11 +1,6 @@
 'use client';
 
-import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
-
-export type InputProps = DetailedHTMLProps<
-    InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
->;
+import { InputProps } from '@/types';
 
 export function Input({ className, ...props }: InputProps) {
     return (

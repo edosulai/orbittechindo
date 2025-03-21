@@ -1,11 +1,6 @@
 'use client';
 
-import React, { LabelHTMLAttributes, DetailedHTMLProps } from 'react';
-
-export type LabelProps = DetailedHTMLProps<
-    LabelHTMLAttributes<HTMLLabelElement>,
-    HTMLLabelElement
->;
+import { LabelProps } from '@/types';
 
 export function Label({ className, ...props }: LabelProps) {
     return (

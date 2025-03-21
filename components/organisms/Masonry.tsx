@@ -1,27 +1,16 @@
 'use client';
 
-import { MoviePoster } from '@/types';
+import { MASONRY_BREAKPOINT_COLUMNS_OBJ } from '@/consts';
+import { MasonryProps } from '@/types';
+import { motion } from 'framer-motion';
 import ReactMasonry from 'react-masonry-css';
 import { MovieCard } from '../molecules';
-import { motion } from 'framer-motion';
-
-interface MasonryProps {
-    list: MoviePoster[];
-    handleMovieClick: (imdbID: string) => void;
-}
-
-const breakpointColumnsObj = {
-    default: 5,
-    1100: 4,
-    700: 3,
-    500: 2
-};
 
 export function Masonry({ list, handleMovieClick }: MasonryProps) {
     return (
         <>
             <ReactMasonry
-                breakpointCols={breakpointColumnsObj}
+                breakpointCols={MASONRY_BREAKPOINT_COLUMNS_OBJ}
                 className="flex gap-2 w-fit"
                 columnClassName="w-full flex flex-col gap-2 w-fit"
             >

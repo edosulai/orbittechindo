@@ -1,5 +1,5 @@
 import { API_KEY, OMDB_API_URL } from '@/consts';
-import { MovieData, Masonry, MovieRequest } from '@/types';
+import { MovieData, MovieList, MovieRequest } from '@/types';
 import axios from 'axios';
 
 /**
@@ -13,13 +13,18 @@ import axios from 'axios';
  * @example
  * const movies = await fetchMovieQuery('Guardians', 'movie', [1990, 2020], 1);
  */
-export async function fetchMovieQuery(query: string, type: string, page: number = 1, year?: number) {
+export async function fetchMovieQuery(
+    query: string,
+    type: string,
+    page: number = 1,
+    year?: number,
+) {
     try {
         const params: MovieRequest = {
             apikey: API_KEY,
             type: type,
             y: year,
-            page
+            page,
         };
 
         if (query.length < 3) {
@@ -28,7 +33,7 @@ export async function fetchMovieQuery(query: string, type: string, page: number 
             params.s = query; // Use search query
         }
 
-        const response = await axios.get<Masonry>(OMDB_API_URL, { params });
+        const response = await axios.get<MovieList>(OMDB_API_URL, { params });
         return response.data;
     } catch (error) {
         console.error('Error fetching movie data:', error);
@@ -49,8 +54,8 @@ export async function fetchMovieById(id: string) {
         const response = await axios.get<MovieData>(OMDB_API_URL, {
             params: {
                 apikey: API_KEY,
-                i: id
-            }
+                i: id,
+            },
         });
         return response.data;
     } catch (error) {

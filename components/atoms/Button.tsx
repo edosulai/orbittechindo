@@ -1,12 +1,7 @@
 'use client';
 
-import { HTMLMotionProps, motion } from 'framer-motion';
-import React from 'react';
-
-interface ButtonProps extends HTMLMotionProps<'button'> {
-    children: React.ReactNode;
-    isLoading?: boolean;
-}
+import { ButtonProps } from '@/types';
+import { motion } from 'framer-motion';
 
 export function Button({
     className,

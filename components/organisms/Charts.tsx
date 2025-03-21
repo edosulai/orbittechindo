@@ -1,14 +1,14 @@
-import { Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis, ResponsiveContainer } from 'recharts';
-
-interface GenreData {
-    genre: string;
-    count: number;
-}
-
-interface RatingData {
-    source: string;
-    value: number;
-}
+import { GenreData, RatingData } from '@/types';
+import {
+    Bar,
+    BarChart,
+    CartesianGrid,
+    Legend,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
+} from 'recharts';
 
 export function GenreDistribution({ data }: { data: GenreData[] }) {
     return (

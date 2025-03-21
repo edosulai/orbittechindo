@@ -19,5 +19,3 @@ export function useProtectedRoute() {
         logout,
     };
 }
-
-export default useProtectedRoute;
