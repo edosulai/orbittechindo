@@ -50,7 +50,7 @@ export interface MoviePoster {
   Type: string;
 }
 
-export interface MovieList extends FailedResponse {
+export interface Masonry extends FailedResponse {
   Search?: MoviePoster[];
 }
 

@@ -4,7 +4,7 @@ import {
     Carousel,
     Footer,
     MovieHeader,
-    MovieList
+    Masonry
 } from '@/components';
 import { useProtectedRoute } from '@/hooks';
 import { MovieFormData, movieSchema } from '@/schemas';
@@ -128,7 +128,7 @@ function Page() {
     };
 
     return (
-        <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+        <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-4 sm:p-8 md:p-12 lg:p-16 xl:p-20 gap-8 sm:gap-16">
             <FormProvider {...methods}>
                 <MovieHeader
                     typeFilter={typeFilter}
@@ -138,12 +138,12 @@ function Page() {
                     handleYearRangeChange={handleYearRangeChange}
                 />
             </FormProvider>
-            <main className="flex flex-col gap-[32px] row-start-2 items-center justify-center hidden">
+            <main className="flex flex-col gap-8 sm:gap-16 row-start-2 items-center justify-center">
                 <Carousel
                     list={movies.slice(0, 5)}
                     handleMovieClick={handleMovieClick}
                 />
-                <MovieList list={movies} handleMovieClick={handleMovieClick} />
+                <Masonry list={movies} handleMovieClick={handleMovieClick} />
 
                 {isLoading && <p>Loading...</p>}
                 {error && <p>{error.message}</p>}
