@@ -17,8 +17,10 @@ export const useAuthStore = create<AuthStore>((set) => ({
     },
     login: (token: string) => {
         localStorage.setItem('token', token);
+        window.location.replace('/');
     },
     logout: () => {
         localStorage.removeItem('token');
+        window.location.replace('/login');
     },
 }));

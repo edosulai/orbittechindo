@@ -1,6 +1,11 @@
 'use client';
 
-import { Carousel, Footer, MovieHeader, MovieList } from '@/components';
+import {
+    Carousel,
+    Footer,
+    MovieHeader,
+    MovieList
+} from '@/components';
 import { useProtectedRoute } from '@/hooks';
 import { MovieFormData, movieSchema } from '@/schemas';
 import { fetchMovieQuery } from '@/services';
@@ -15,7 +20,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 function Page() {
     const router = useRouter();
-    const { isAuthenticated, authIsLoading } = useProtectedRoute();
     const methods = useForm<MovieFormData>({
         resolver: zodResolver(movieSchema),
         defaultValues: useMovieStore.getState(),
@@ -32,19 +36,6 @@ function Page() {
     const [movies, setMovies] = useState<MoviePoster[]>([]);
     const loadMoreRef = useRef(null);
 
-    const fetchMovies = async ({ pageParam = 1 }) => {
-        const result = await fetchMovieQuery(
-            title || 'all',
-            typeFilter || '',
-            yearRange,
-            pageParam,
-        );
-        if (result.Response === 'False') {
-            throw new Error(result.Error);
-        }
-        return result.Search || [];
-    };
-
     const {
         data,
         error,
@@ -54,7 +45,18 @@ function Page() {
         isFetchingNextPage,
     } = useInfiniteQuery({
         queryKey: ['search-movie', title, typeFilter, yearRange],
-        queryFn: fetchMovies,
+        queryFn: async ({ pageParam = 1 }) => {
+            const result = await fetchMovieQuery(
+                title || 'all',
+                typeFilter || '',
+                yearRange,
+                pageParam,
+            );
+            if (result.Response === 'False') {
+                throw new Error(result.Error);
+            }
+            return result.Search || [];
+        },
         getNextPageParam: (lastPage, allPages) => {
             return lastPage.length ? allPages.length + 1 : undefined;
         },
@@ -79,11 +81,11 @@ function Page() {
                     fetchNextPage();
                 }
             },
-            { threshold: 1 },
+            {
+                threshold: 1,
+            },
         );
-
         if (loadMoreRef.current) observer.observe(loadMoreRef.current);
-
         return () => observer.disconnect();
     }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
@@ -102,13 +104,9 @@ function Page() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-    if (authIsLoading) {
-        return <p>Loading...</p>;
-    }
-
-    if (!isAuthenticated) {
-        router.replace('/login');
-        return null;
+    const { isAuthenticated, authIsLoading, logout } = useProtectedRoute();
+    if (!authIsLoading && !isAuthenticated) {
+        logout()
     }
 
     const handleTitleChange = debounce((value: string) => {
@@ -140,7 +138,7 @@ function Page() {
                     handleYearRangeChange={handleYearRangeChange}
                 />
             </FormProvider>
-            <main className="flex flex-col gap-[32px] row-start-2 items-center justify-center">
+            <main className="flex flex-col gap-[32px] row-start-2 items-center justify-center hidden">
                 <Carousel
                     list={movies.slice(0, 5)}
                     handleMovieClick={handleMovieClick}

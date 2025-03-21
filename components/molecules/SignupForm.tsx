@@ -4,6 +4,7 @@ import { SignupFormData, signupSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 import { Button, Input } from '../atoms';
 
 export function SignupForm() {
@@ -15,12 +16,20 @@ export function SignupForm() {
         resolver: zodResolver(signupSchema),
     });
     const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
 
-    const onSubmit = (data: SignupFormData) => {
-        console.log(data);
-        // Handle form submission
-        alert('Signup successful!');
-        router.push('/login');
+    const onSubmit = async (data: SignupFormData) => {
+        setIsLoading(true);
+        try {
+            console.log(data);
+            // Handle form submission
+            alert('Signup successful!');
+            router.push('/login');
+        } catch (error) {
+            console.error('Signup failed', error);
+            alert('An error occurred. Please try again.');
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -49,7 +58,7 @@ export function SignupForm() {
             {errors.phone && (
                 <p className="text-red-500">{errors.phone.message}</p>
             )}
-            <Button type="submit">Signup</Button>
+            <Button type="submit" isLoading={isLoading}>Signup</Button>
         </form>
     );
 }
