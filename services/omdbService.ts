@@ -6,19 +6,19 @@ import axios from 'axios';
  * Fetch movie data from OMDB API by query.
  * @param {string} query - The search query for the movies.
  * @param {string} type - The type of the movie (e.g., "movie" or "series").
- * @param {number[]} yearRange - The range of years for the movies.
+ * @param {number} year - The years for the movies.
  * @param {number} page - The page number for pagination.
  * @returns {Promise<MovieData[]>} - The list of movie data.
  * @throws {Error} - An error.
  * @example
  * const movies = await fetchMovieQuery('Guardians', 'movie', [1990, 2020], 1);
  */
-export async function fetchMovieQuery(query: string, type: string, yearRange: number[], page: number = 1) {
+export async function fetchMovieQuery(query: string, type: string, page: number = 1, year?: number) {
     try {
         const params: MovieRequest = {
             apikey: API_KEY,
             type: type,
-            y: `${yearRange[0]}-${yearRange[1]}`,
+            y: year,
             page
         };
 

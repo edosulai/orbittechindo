@@ -3,8 +3,8 @@
 import {
     Carousel,
     Footer,
-    MovieHeader,
-    Masonry
+    Masonry,
+    MovieHeader
 } from '@/components';
 import { useProtectedRoute } from '@/hooks';
 import { MovieFormData, movieSchema } from '@/schemas';
@@ -49,13 +49,16 @@ function Page() {
             const result = await fetchMovieQuery(
                 title || 'all',
                 typeFilter || '',
-                yearRange,
                 pageParam,
             );
             if (result.Response === 'False') {
                 throw new Error(result.Error);
             }
-            return result.Search || [];
+            const filteredResults = (result.Search || []).filter((movie) => {
+                const movieYear = parseInt(movie.Year, 10);
+                return movieYear >= yearRange[0] && movieYear <= yearRange[1];
+            });
+            return filteredResults;
         },
         getNextPageParam: (lastPage, allPages) => {
             return lastPage.length ? allPages.length + 1 : undefined;
@@ -113,10 +116,8 @@ function Page() {
         setTitle(value);
     }, 300);
 
-    const handleTypeFilterChange = (
-        event: React.ChangeEvent<HTMLSelectElement>,
-    ) => {
-        setTypeFilter(event.target.value);
+    const handleTypeFilterChange = (value: string) => {
+        setTypeFilter(value);
     };
 
     const handleYearRangeChange = (value: [number, number]) => {

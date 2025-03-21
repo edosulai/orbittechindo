@@ -7,7 +7,7 @@ import {
     LoadingSpinner,
     RatingsDistribution,
 } from '@/components';
-import { useProtectedRoute } from '@/hooks';
+import { useProtectedRoute, useValidImage } from '@/hooks';
 import { fetchMovieById } from '@/services';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
@@ -43,6 +43,8 @@ function MovieDetailPage() {
         logout();
     }
 
+    const isValidImage = useValidImage(data?.Poster || '');
+
     if (queryIsLoading) {
         return <LoadingSpinner />;
     }
@@ -77,13 +79,21 @@ function MovieDetailPage() {
                 </Button>
                 <h1 className="text-2xl sm:text-3xl font-bold">{data.Title}</h1>
                 <div className="flex flex-col sm:flex-row gap-4">
-                    <Image
-                        src={data.Poster}
-                        alt={data.Title}
-                        width={200}
-                        height={300}
-                        className="rounded-lg shadow-md"
-                    />
+                    {isValidImage ? (
+                        <Image
+                            src={data.Poster}
+                            alt={data.Title}
+                            width={200}
+                            height={300}
+                            className="rounded-lg shadow-md"
+                        />
+                    ) : (
+                        <div className="w-[200px] h-[300px] flex items-center justify-center bg-gray-200 rounded-md">
+                            <span className="text-gray-900">
+                                Image Not Available
+                            </span>
+                        </div>
+                    )}
                     <div className="space-y-2">
                         <p>
                             <strong>Year:</strong> {data.Year}
@@ -113,7 +123,7 @@ function MovieDetailPage() {
 
                     <div>
                         <h2 className="text-xl sm:text-2xl font-semibold mt-8 text-center">
-                            Ratings Distribution 
+                            Ratings Distribution
                         </h2>
                         <RatingsDistribution data={ratingData} />
                     </div>

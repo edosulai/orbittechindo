@@ -9,11 +9,9 @@ import { useAuthStore } from '@/stores';
 export interface MovieHeaderProps {
     typeFilter?: string;
     yearRange: [number, number];
-    handleTitleChange: (value: string) => void;
-    handleTypeFilterChange: (
-        event: React.ChangeEvent<HTMLSelectElement>,
-    ) => void;
-    handleYearRangeChange: (value: [number, number]) => void;
+    handleTitleChange: (title: string) => void;
+    handleTypeFilterChange: (type: string) => void;
+    handleYearRangeChange: (range: [number, number]) => void;
 }
 
 export function MovieHeader({
@@ -27,6 +25,7 @@ export function MovieHeader({
     const { control } = useForm();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const [title, setTitle] = useState('');
 
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
@@ -59,7 +58,7 @@ export function MovieHeader({
                     <Select
                         id="typeFilter"
                         value={typeFilter || ''}
-                        onChange={handleTypeFilterChange}
+                        onChange={(e) => handleTypeFilterChange(e.target.value)}
                     >
                         <option value="">All</option>
                         <option value="movie">Movie</option>
@@ -113,20 +112,14 @@ export function MovieHeader({
                             )}
                         />
                     </div>
-                    <Controller
-                        name="title"
-                        control={control}
-                        render={({ field }) => (
-                            <Input
-                                {...field}
-                                id="title"
-                                placeholder="Search by title"
-                                onChange={(e) => {
-                                    field.onChange(e);
-                                    handleTitleChange(e.target.value);
-                                }}
-                            />
-                        )}
+                    <Input
+                        type="text"
+                        value={title}
+                        onChange={(e) => {
+                            setTitle(e.target.value);
+                            handleTitleChange(e.target.value);
+                        }}
+                        placeholder="Search by title"
                     />
                     <div className="relative" ref={dropdownRef}>
                         <Button

@@ -9,8 +9,8 @@ export interface MovieDataStore extends MovieFormData {
 export interface MovieRequest {
   apikey: string;
   type: string;
-  y: string;
   page: number;
+  y?: number;
   t?: string;
   s?: string;
 }
