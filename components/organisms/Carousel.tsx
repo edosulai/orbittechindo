@@ -4,6 +4,7 @@ import { MoviePoster } from '@/types';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useEffect, useState } from 'react';
 import { MovieCard } from '../molecules';
+import { motion } from 'framer-motion';
 
 interface CarouselProps {
     list: MoviePoster[];
@@ -42,15 +43,21 @@ export function Carousel({ list, handleMovieClick }: CarouselProps) {
 
     return (
         <div className="overflow-hidden w-full" ref={emblaRef}>
-            <div className="flex justify-center items-center">
+            <motion.div className="flex justify-center items-center">
                 {list.slice(0, itemsToShow).map((movie, i) => (
-                    <MovieCard
+                    <motion.div
                         key={i}
-                        movie={movie}
-                        handleMovieClick={handleMovieClick}
-                    />
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <MovieCard
+                            movie={movie}
+                            handleMovieClick={handleMovieClick}
+                        />
+                    </motion.div>
                 ))}
-            </div>
+            </motion.div>
         </div>
     );
 }

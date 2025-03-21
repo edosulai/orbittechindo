@@ -59,7 +59,7 @@ export function LoginForm() {
             {errors.password && (
                 <p className="text-red-500">{errors.password.message}</p>
             )}
-            <Button type="submit" isLoading={isLoading}>
+            <Button type="submit" isLoading={isLoading} className="transition-transform transform hover:scale-105">
                 Login
             </Button>
         </form>

@@ -3,6 +3,7 @@
 import { MoviePoster } from '@/types';
 import ReactMasonry from 'react-masonry-css';
 import { MovieCard } from '../molecules';
+import { motion } from 'framer-motion';
 
 interface MasonryProps {
     list: MoviePoster[];
@@ -25,11 +26,17 @@ export function Masonry({ list, handleMovieClick }: MasonryProps) {
                 columnClassName="w-full flex flex-col gap-2 w-fit"
             >
                 {list.map((movie, i) => (
-                    <MovieCard
+                    <motion.div
                         key={i}
-                        movie={movie}
-                        handleMovieClick={handleMovieClick}
-                    />
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <MovieCard
+                            movie={movie}
+                            handleMovieClick={handleMovieClick}
+                        />
+                    </motion.div>
                 ))}
             </ReactMasonry>
             {list.length === 0 && <p>No movies found</p>}

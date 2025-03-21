@@ -58,7 +58,13 @@ export function SignupForm() {
             {errors.phone && (
                 <p className="text-red-500">{errors.phone.message}</p>
             )}
-            <Button type="submit" isLoading={isLoading}>Signup</Button>
+            <Button
+                type="submit"
+                isLoading={isLoading}
+                className="transition-transform transform hover:scale-105"
+            >
+                Signup
+            </Button>
         </form>
     );
 }

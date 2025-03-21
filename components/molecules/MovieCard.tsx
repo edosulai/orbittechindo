@@ -2,6 +2,7 @@
 
 import { MoviePoster } from '@/types';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 interface MovieCardProps {
     movie: MoviePoster;
@@ -10,9 +11,11 @@ interface MovieCardProps {
 
 export function MovieCard({ movie, handleMovieClick }: MovieCardProps) {
     return (
-        <div
+        <motion.div
             className="flex flex-col items-center rounded-lg shadow-md p-2"
             onClick={() => handleMovieClick(movie.imdbID)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
         >
             <div
                 className="flex flex-col justify-center items-center relative cursor-pointer"
@@ -34,6 +37,6 @@ export function MovieCard({ movie, handleMovieClick }: MovieCardProps) {
                     </p>
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 }

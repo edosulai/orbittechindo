@@ -1,8 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { DatePicker, Input, Select } from '../atoms';
+import { DatePicker, Input, Select, Button } from '../atoms';
+import Image from 'next/image';
+import { useAuthStore } from '@/stores';
 
 export interface MovieHeaderProps {
     typeFilter?: string;
@@ -21,7 +23,34 @@ export function MovieHeader({
     handleTypeFilterChange,
     handleYearRangeChange,
 }: MovieHeaderProps) {
+    const logout = useAuthStore((state) => state.logout);
     const { control } = useForm();
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    const toggleDropdown = () => {
+        setDropdownOpen(!dropdownOpen);
+    };
+
+    const handleLogout = () => {
+        logout();
+    };
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (
+            dropdownRef.current &&
+            !dropdownRef.current.contains(event.target as Node)
+        ) {
+            setDropdownOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     return (
         <>
@@ -99,6 +128,30 @@ export function MovieHeader({
                             />
                         )}
                     />
+                    <div className="relative" ref={dropdownRef}>
+                        <Button
+                            className="transition-transform transform hover:scale-105"
+                            onClick={toggleDropdown}
+                        >
+                            <Image
+                                src="/vercel.svg"
+                                alt="Account"
+                                width={24}
+                                height={24}
+                                className="object-contain"
+                            />
+                        </Button>
+                        {dropdownOpen && (
+                            <div className="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
+                                <button
+                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 cursor-pointer"
+                                    onClick={handleLogout}
+                                >
+                                    Logout
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </header>
             </div>
         </>

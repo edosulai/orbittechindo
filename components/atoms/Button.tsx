@@ -1,11 +1,11 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { HTMLMotionProps, motion } from 'framer-motion';
 import React from 'react';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends HTMLMotionProps<'button'> {
     children: React.ReactNode;
-    isLoading: boolean;
+    isLoading?: boolean;
 }
 
 export function Button({
@@ -15,10 +15,12 @@ export function Button({
     ...props
 }: ButtonProps) {
     return (
-        <button
+        <motion.button
             className={`rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto ${className}`}
             {...props}
-            disabled={isLoading} // Disable tombol saat loading
+            disabled={isLoading}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
         >
             {children}
             {isLoading && (
@@ -32,6 +34,6 @@ export function Button({
                     }}
                 />
             )}
-        </button>
+        </motion.button>
     );
 }
