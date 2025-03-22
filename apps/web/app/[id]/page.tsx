@@ -1,18 +1,22 @@
 "use client";
 
-import {
-  Button,
-  Footer,
-  GenreDistribution,
-  LoadingSpinner,
-  RatingsDistribution,
-} from "@/components";
+import { Button, Footer, LoadingSpinner } from "@/components";
 import { useProtectedRoute, useValidImage } from "@/hooks";
 import { fetchMovieById } from "@/services";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 function MovieDetailPage() {
   const router = useRouter();
@@ -116,14 +120,36 @@ function MovieDetailPage() {
             <h2 className="text-xl sm:text-2xl font-semibold mt-8 text-center">
               Genre Distribution
             </h2>
-            <GenreDistribution data={genreData} />
+            <div className="w-full max-w-full overflow-x-auto">
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={genreData} className="w-full h-auto">
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="genre" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="count" fill="#8884d8" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
 
           <div>
             <h2 className="text-xl sm:text-2xl font-semibold mt-8 text-center">
               Ratings Distribution
             </h2>
-            <RatingsDistribution data={ratingData} />
+            <div className="w-full max-w-full overflow-x-auto">
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={ratingData} className="w-full h-auto">
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="source" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="value" fill="#82ca9d" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
       </main>

@@ -3,8 +3,11 @@
 import { CarouselProps } from "@/types";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { View } from "react-native";
 import RNCarousel from "react-native-reanimated-carousel";
 import { MovieCard } from "../molecules";
+
+const MotionView = motion(View);
 
 export function Carousel({ list, handleMovieClick }: CarouselProps) {
   const [itemsToShow, setItemsToShow] = useState(2);
@@ -35,14 +38,14 @@ export function Carousel({ list, handleMovieClick }: CarouselProps) {
       height={400}
       data={list.slice(0, itemsToShow)}
       renderItem={({ item: movie, index }) => (
-        <motion.div
+        <MotionView
           key={index}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}
         >
           <MovieCard movie={movie} handleMovieClick={handleMovieClick} />
-        </motion.div>
+        </MotionView>
       )}
     />
   );

@@ -1,18 +1,13 @@
 "use client";
 
-import {
-  Button,
-  Footer,
-  GenreDistribution,
-  LoadingSpinner,
-  RatingsDistribution,
-} from "@/components";
+import { Button, Footer, LoadingSpinner } from "@/components";
 import { useProtectedRoute, useValidImage } from "@/hooks";
 import { fetchMovieById } from "@/services";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { Image, Text, View } from "react-native";
+import { Bar, CartesianChart } from "victory-native";
 
 function MovieDetailPage() {
   const router = useRouter();
@@ -115,14 +110,36 @@ function MovieDetailPage() {
             <Text className="text-xl sm:text-2xl font-semibold mt-8 text-center">
               Genre Distribution
             </Text>
-            <GenreDistribution data={genreData} />
+            <View className="w-full max-w-full overflow-x-auto">
+              <CartesianChart data={genreData} xKey="genre" yKeys={["count"]}>
+                {({ points, chartBounds }) => (
+                  <Bar
+                    points={points.count}
+                    chartBounds={chartBounds}
+                    color="#8884d8"
+                    roundedCorners={{ topLeft: 10, topRight: 10 }}
+                  />
+                )}
+              </CartesianChart>
+            </View>
           </View>
 
           <View>
             <Text className="text-xl sm:text-2xl font-semibold mt-8 text-center">
               Ratings Distribution
             </Text>
-            <RatingsDistribution data={ratingData} />
+            <View className="w-full max-w-full overflow-x-auto">
+              <CartesianChart data={ratingData} xKey="source" yKeys={["value"]}>
+                {({ points, chartBounds }) => (
+                  <Bar
+                    points={points.value}
+                    chartBounds={chartBounds}
+                    color="#82ca9d"
+                    roundedCorners={{ topLeft: 10, topRight: 10 }}
+                  />
+                )}
+              </CartesianChart>
+            </View>
           </View>
         </View>
       </View>
