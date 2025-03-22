@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { MoviePoster } from '@/types';
+import { MoviePoster } from "@/types";
 
 export interface MovieCardProps {
-    movie: MoviePoster;
-    handleMovieClick: (imdbID: string) => void;
+  movie: MoviePoster;
+  handleMovieClick: (imdbID: string) => void;
 }

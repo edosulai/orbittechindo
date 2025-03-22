@@ -1,5 +1,5 @@
-'use client';
+"use client";
 
-import { TextProps } from 'react-native';
+import { TextProps } from "react-native";
 
 export type LabelProps = TextProps;

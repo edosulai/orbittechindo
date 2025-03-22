@@ -1,6 +1,6 @@
-import { API_KEY, OMDB_API_URL } from '@/consts';
-import { MovieData, MovieList, MovieRequest } from '@/types';
-import axios from 'axios';
+import { API_KEY, OMDB_API_URL } from "@/consts";
+import { MovieData, MovieList, MovieRequest } from "@/types";
+import axios from "axios";
 
 /**
  * Fetch movie data from OMDB API by query.
@@ -14,31 +14,31 @@ import axios from 'axios';
  * const movies = await fetchMovieQuery('Guardians', 'movie', [1990, 2020], 1);
  */
 export async function fetchMovieQuery(
-    query: string,
-    type: string,
-    page: number = 1,
-    year?: number,
+  query: string,
+  type: string,
+  page: number = 1,
+  year?: number,
 ) {
-    try {
-        const params: MovieRequest = {
-            apikey: API_KEY,
-            type: type,
-            y: year,
-            page,
-        };
+  try {
+    const params: MovieRequest = {
+      apikey: API_KEY,
+      type: type,
+      y: year,
+      page,
+    };
 
-        if (query.length < 3) {
-            params.t = query; // Switch to title search
-        } else {
-            params.s = query; // Use search query
-        }
-
-        const response = await axios.get<MovieList>(OMDB_API_URL, { params });
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching movie data:', error);
-        throw error;
+    if (query.length < 3) {
+      params.t = query; // Switch to title search
+    } else {
+      params.s = query; // Use search query
     }
+
+    const response = await axios.get<MovieList>(OMDB_API_URL, { params });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching movie data:", error);
+    throw error;
+  }
 }
 
 /**
@@ -50,16 +50,16 @@ export async function fetchMovieQuery(
  * const movie = await fetchMovieById('tt3896198');
  */
 export async function fetchMovieById(id: string) {
-    try {
-        const response = await axios.get<MovieData>(OMDB_API_URL, {
-            params: {
-                apikey: API_KEY,
-                i: id,
-            },
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching movie data:', error);
-        throw error;
-    }
+  try {
+    const response = await axios.get<MovieData>(OMDB_API_URL, {
+      params: {
+        apikey: API_KEY,
+        i: id,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching movie data:", error);
+    throw error;
+  }
 }

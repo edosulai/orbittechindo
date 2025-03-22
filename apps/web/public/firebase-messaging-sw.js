@@ -1,6 +1,6 @@
 importScripts("https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js");
 importScripts(
-  "https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"
+  "https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js",
 );
 
 // Replace these with your own Firebase config keys...
@@ -21,7 +21,7 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
   console.log(
     "[firebase-messaging-sw.js] Received background message ",
-    payload
+    payload,
   );
 
   // payload.fcmOptions?.link comes from our backend API route handle
@@ -63,6 +63,6 @@ self.addEventListener("notificationclick", function (event) {
           console.log("OPENWINDOW ON CLIENT");
           return clients.openWindow(url);
         }
-      })
+      }),
   );
 });

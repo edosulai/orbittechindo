@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['m.media-amazon.com'],
+    domains: ["m.media-amazon.com"],
   },
   webpack: (config) => {
     config.resolve.alias = {

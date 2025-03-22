@@ -1,139 +1,134 @@
-'use client';
+"use client";
 
 import {
-    Button,
-    Footer,
-    GenreDistribution,
-    LoadingSpinner,
-    RatingsDistribution,
-} from '@/components';
-import { useProtectedRoute, useValidImage } from '@/hooks';
-import { fetchMovieById } from '@/services';
-import { useQuery } from '@tanstack/react-query';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useState } from 'react';
-import { Image, Text, View } from 'react-native';
+  Button,
+  Footer,
+  GenreDistribution,
+  LoadingSpinner,
+  RatingsDistribution,
+} from "@/components";
+import { useProtectedRoute, useValidImage } from "@/hooks";
+import { fetchMovieById } from "@/services";
+import { useQuery } from "@tanstack/react-query";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useState } from "react";
+import { Image, Text, View } from "react-native";
 
 function MovieDetailPage() {
-    const router = useRouter();
-    const { id } = useLocalSearchParams();
-    const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { id } = useLocalSearchParams();
+  const [isLoading, setIsLoading] = useState(false);
 
-    const {
-        data,
-        error,
-        isLoading: queryIsLoading,
-    } = useQuery({
-        queryKey: ['detail-movie', id],
-        queryFn: async () => {
-            const result = await fetchMovieById(id!.toString());
+  const {
+    data,
+    error,
+    isLoading: queryIsLoading,
+  } = useQuery({
+    queryKey: ["detail-movie", id],
+    queryFn: async () => {
+      const result = await fetchMovieById(id!.toString());
 
-            if (result.Response === 'False') {
-                throw new Error(result.Error);
-            }
+      if (result.Response === "False") {
+        throw new Error(result.Error);
+      }
 
-            return result;
-        },
-        enabled: !!id,
-    });
+      return result;
+    },
+    enabled: !!id,
+  });
 
-    const { isAuthenticated, authIsLoading, logout } = useProtectedRoute();
-    if (!authIsLoading && !isAuthenticated) {
-        logout();
-    }
+  const { isAuthenticated, authIsLoading, logout } = useProtectedRoute();
+  if (!authIsLoading && !isAuthenticated) {
+    logout();
+  }
 
-    const isValidImage = useValidImage(data?.Poster || '');
+  const isValidImage = useValidImage(data?.Poster || "");
 
-    if (queryIsLoading) {
-        return <LoadingSpinner />;
-    }
+  if (queryIsLoading) {
+    return <LoadingSpinner />;
+  }
 
-    if (error) {
-        return <Text>{error.message}</Text>;
-    }
+  if (error) {
+    return <Text>{error.message}</Text>;
+  }
 
-    if (!data) {
-        return <Text>No movie data found</Text>;
-    }
+  if (!data) {
+    return <Text>No movie data found</Text>;
+  }
 
-    const genreData = data.Genre.split(', ').map((genre) => ({
-        genre,
-        count: 1,
-    }));
-    const ratingData = data.Ratings.map((rating) => ({
-        source: rating.Source,
-        value: parseFloat(rating.Value),
-    }));
+  const genreData = data.Genre.split(", ").map((genre) => ({
+    genre,
+    count: 1,
+  }));
+  const ratingData = data.Ratings.map((rating) => ({
+    source: rating.Source,
+    value: parseFloat(rating.Value),
+  }));
 
-    const handleBackClick = () => {
-        setIsLoading(true);
-        router.back();
-    };
+  const handleBackClick = () => {
+    setIsLoading(true);
+    router.back();
+  };
 
-    return (
-        <View className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-4 sm:p-8 md:p-12 lg:p-16 xl:p-20 gap-8 sm:gap-16">
-            <View className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-                <Button onPress={handleBackClick} isLoading={isLoading}>
-                    <Text>Back</Text>
-                </Button>
-                <h1 className="text-2xl sm:text-3xl font-bold">{data.Title}</h1>
-                <View className="flex flex-col sm:flex-row gap-4">
-                    {isValidImage ? (
-                        <Image
-                            src={data.Poster}
-                            alt={data.Title}
-                            width={200}
-                            height={300}
-                            className="rounded-lg shadow-md"
-                        />
-                    ) : (
-                        <View className="w-[200px] h-[300px] flex items-center justify-center bg-gray-200 rounded-md">
-                            <Text className="text-gray-900">
-                                Image Not Available
-                            </Text>
-                        </View>
-                    )}
-                    <View className="space-y-2">
-                        <Text>
-                            <Text className="font-bold">Year:</Text> {data.Year}
-                        </Text>
-                        <Text>
-                            <Text className="font-bold">Genre:</Text>{' '}
-                            {data.Genre}
-                        </Text>
-                        <Text>
-                            <Text className="font-bold">Rating:</Text>{' '}
-                            {data.imdbRating}
-                        </Text>
-                        <Text>
-                            <Text className="font-bold">Plot:</Text> {data.Plot}
-                        </Text>
-                        <Text>
-                            <Text className="font-bold">Cast:</Text>{' '}
-                            {data.Actors}
-                        </Text>
-                    </View>
-                </View>
-
-                <View className="flex flex-col sm:flex-row gap-8">
-                    <View>
-                        <Text className="text-xl sm:text-2xl font-semibold mt-8 text-center">
-                            Genre Distribution
-                        </Text>
-                        <GenreDistribution data={genreData} />
-                    </View>
-
-                    <View>
-                        <Text className="text-xl sm:text-2xl font-semibold mt-8 text-center">
-                            Ratings Distribution
-                        </Text>
-                        <RatingsDistribution data={ratingData} />
-                    </View>
-                </View>
+  return (
+    <View className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-4 sm:p-8 md:p-12 lg:p-16 xl:p-20 gap-8 sm:gap-16">
+      <View className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+        <Button onPress={handleBackClick} isLoading={isLoading}>
+          <Text>Back</Text>
+        </Button>
+        <h1 className="text-2xl sm:text-3xl font-bold">{data.Title}</h1>
+        <View className="flex flex-col sm:flex-row gap-4">
+          {isValidImage ? (
+            <Image
+              src={data.Poster}
+              alt={data.Title}
+              width={200}
+              height={300}
+              className="rounded-lg shadow-md"
+            />
+          ) : (
+            <View className="w-[200px] h-[300px] flex items-center justify-center bg-gray-200 rounded-md">
+              <Text className="text-gray-900">Image Not Available</Text>
             </View>
-            <Footer />
+          )}
+          <View className="space-y-2">
+            <Text>
+              <Text className="font-bold">Year:</Text> {data.Year}
+            </Text>
+            <Text>
+              <Text className="font-bold">Genre:</Text> {data.Genre}
+            </Text>
+            <Text>
+              <Text className="font-bold">Rating:</Text> {data.imdbRating}
+            </Text>
+            <Text>
+              <Text className="font-bold">Plot:</Text> {data.Plot}
+            </Text>
+            <Text>
+              <Text className="font-bold">Cast:</Text> {data.Actors}
+            </Text>
+          </View>
         </View>
-    );
+
+        <View className="flex flex-col sm:flex-row gap-8">
+          <View>
+            <Text className="text-xl sm:text-2xl font-semibold mt-8 text-center">
+              Genre Distribution
+            </Text>
+            <GenreDistribution data={genreData} />
+          </View>
+
+          <View>
+            <Text className="text-xl sm:text-2xl font-semibold mt-8 text-center">
+              Ratings Distribution
+            </Text>
+            <RatingsDistribution data={ratingData} />
+          </View>
+        </View>
+      </View>
+      <Footer />
+    </View>
+  );
 }
 
 export default MovieDetailPage;

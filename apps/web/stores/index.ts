@@ -1,2 +1,2 @@
-export * from './useMovieStore';
-export * from './useAuthStore';
+export * from "./useMovieStore";
+export * from "./useAuthStore";

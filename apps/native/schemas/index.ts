@@ -1,3 +1,3 @@
-export * from './movieSchema';
-export * from './signupSchema';
-export * from './loginSchema';
+export * from "./movieSchema";
+export * from "./signupSchema";
+export * from "./loginSchema";

@@ -1,2 +1,2 @@
-export * from './useProtectedRoute';
-export * from './useValidImage';
+export * from "./useProtectedRoute";
+export * from "./useValidImage";

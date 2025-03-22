@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { MoviePoster } from '@/types';
+import { MoviePoster } from "@/types";
 
 export interface CarouselProps {
-    list: MoviePoster[];
-    handleMovieClick: (imdbID: string) => void;
+  list: MoviePoster[];
+  handleMovieClick: (imdbID: string) => void;
 }

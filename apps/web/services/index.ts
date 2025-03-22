@@ -1,1 +1,1 @@
-export * from './omdbService';
+export * from "./omdbService";

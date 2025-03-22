@@ -1,9 +1,9 @@
 interface Item {
-    name: string;
-    onClick: () => void;
+  name: string;
+  onClick: () => void;
 }
 
 export interface DropdownProps {
-    children: React.ReactNode;
-    items: Item[];
+  children: React.ReactNode;
+  items: Item[];
 }
