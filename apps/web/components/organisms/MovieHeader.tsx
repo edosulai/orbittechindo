@@ -2,10 +2,10 @@
 
 import { useAuthStore } from "@/stores";
 import { MovieHeaderProps } from "@/types";
+import Image from "next/image";
 import { Controller, useForm } from "react-hook-form";
 import { DatePicker, Input, Select } from "../atoms";
 import { Dropdown } from "../molecules";
-import Image from "next/image";
 
 export function MovieHeader({
   handleTitleChange,

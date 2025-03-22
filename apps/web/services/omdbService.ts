@@ -1,4 +1,4 @@
-import { API_KEY, OMDB_API_URL } from "@/consts";
+import { OMDB_API_KEY, OMDB_API_URL } from "@/consts";
 import { MovieData, MovieList, MovieRequest } from "@/types";
 import axios from "axios";
 
@@ -21,7 +21,7 @@ export async function fetchMovieQuery(
 ) {
   try {
     const params: MovieRequest = {
-      apikey: API_KEY,
+      apikey: OMDB_API_KEY,
       type: type,
       y: year,
       page,
@@ -53,7 +53,7 @@ export async function fetchMovieById(id: string) {
   try {
     const response = await axios.get<MovieData>(OMDB_API_URL, {
       params: {
-        apikey: API_KEY,
+        apikey: OMDB_API_KEY,
         i: id,
       },
     });

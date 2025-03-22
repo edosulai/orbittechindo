@@ -1,7 +1,6 @@
 "use client";
 
 import { DropdownProps } from "@/types";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "../atoms";
 

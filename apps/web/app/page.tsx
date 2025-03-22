@@ -1,5 +1,4 @@
-"use client";
-
+import React from "react"; // Add this line
 import { Carousel, Footer, Masonry, MovieHeader } from "@/components";
 import { useProtectedRoute } from "@/hooks";
 import { MovieFormData, movieSchema } from "@/schemas";
