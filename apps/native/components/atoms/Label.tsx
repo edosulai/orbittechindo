@@ -1,6 +1,5 @@
-"use client";
-
 import { LabelProps } from "@/types";
+import React from "react";
 import { Text } from "react-native";
 
 export function Label({ className, ...props }: LabelProps) {

@@ -1,13 +1,11 @@
-"use client";
-
 import { CarouselProps } from "@/types";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import RNCarousel from "react-native-reanimated-carousel";
 import { MovieCard } from "../molecules";
 
-const MotionView = motion(View);
+const MotionView = motion.create(View);
 
 export function Carousel({ list, handleMovieClick }: CarouselProps) {
   const [itemsToShow, setItemsToShow] = useState(2);

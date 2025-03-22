@@ -1,11 +1,10 @@
-"use client";
-
 import { ButtonProps } from "@/types";
 import { motion } from "framer-motion";
+import React, { Children, Fragment } from "react";
 import { TouchableWithoutFeedback, View } from "react-native";
 
-const MotionButton = motion(TouchableWithoutFeedback);
-const MotionView = motion(View);
+const MotionButton = motion.create(TouchableWithoutFeedback);
+const MotionView = motion.create(View);
 
 export function Button({
   className,
@@ -21,18 +20,20 @@ export function Button({
       whileTap={{ scale: 0.95 }}
       {...props}
     >
-      {children}
-      {isLoading && (
-        <MotionView
-          className="w-5 h-5 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"
-          animate={{ rotate: 360 }}
-          transition={{
-            repeat: Infinity,
-            duration: 1,
-            ease: "linear",
-          }}
-        />
-      )}
+      <Fragment>
+        {Children.only(children)}
+        {isLoading && (
+          <MotionView
+            className="w-5 h-5 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"
+            animate={{ rotate: 360 }}
+            transition={{
+              repeat: Infinity,
+              duration: 1,
+              ease: "linear",
+            }}
+          />
+        )}
+      </Fragment>
     </MotionButton>
   );
 }

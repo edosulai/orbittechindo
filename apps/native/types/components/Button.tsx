@@ -1,6 +1,5 @@
-"use client";
-
 import { MotionProps } from "framer-motion";
+import React from "react";
 import { TouchableWithoutFeedbackProps } from "react-native";
 
 type CombinedProps = Omit<MotionProps, "style"> &

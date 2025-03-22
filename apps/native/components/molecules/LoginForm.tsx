@@ -1,11 +1,9 @@
-"use client";
-
 import { MOCK_USER } from "@/consts";
 import { LoginFormData, loginSchema } from "@/schemas";
 import { useAuthStore } from "@/stores";
 import { generateToken } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import { Button, Input } from "../atoms";

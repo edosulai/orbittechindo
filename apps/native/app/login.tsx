@@ -1,3 +1,4 @@
+import React from "react"; 
 import { Footer, LoginForm } from "@/components";
 import { useProtectedRoute } from "@/hooks";
 import { useRouter } from "expo-router";

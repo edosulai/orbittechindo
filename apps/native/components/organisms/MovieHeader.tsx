@@ -1,5 +1,4 @@
-"use client";
-
+import React from "react";
 import { useAuthStore } from "@/stores";
 import { MovieHeaderProps } from "@/types";
 import { Controller, useForm } from "react-hook-form";
@@ -60,7 +59,7 @@ export function MovieHeader({
                     (_, i) => ({
                       label: (1900 + i).toString(),
                       value: 1900 + i,
-                    }),
+                    })
                   )}
                 />
               )}
@@ -83,7 +82,7 @@ export function MovieHeader({
                     (_, i) => ({
                       label: (1900 + i).toString(),
                       value: 1900 + i,
-                    }),
+                    })
                   )}
                 />
               )}

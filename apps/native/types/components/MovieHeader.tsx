@@ -1,5 +1,3 @@
-"use client";
-
 export interface MovieHeaderProps {
   handleTitleChange: (title: string) => void;
   handleTypeFilterChange: (type: string) => void;

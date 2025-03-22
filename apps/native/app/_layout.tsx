@@ -7,7 +7,7 @@ import "../styles/globals.css";
 
 const queryClient = new QueryClient();
 
-const MotionView = motion(View);
+const MotionView = motion.create(View);
 
 export default function AppLayout() {
   return (

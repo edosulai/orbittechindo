@@ -1,5 +1,4 @@
-"use client";
-
+import React from "react";
 import { DropdownProps } from "@/types";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "../atoms";

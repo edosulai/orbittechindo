@@ -1,3 +1,4 @@
+import React from "react"; 
 import { Carousel, Footer, Masonry, MovieHeader } from "@/components";
 import { useProtectedRoute } from "@/hooks";
 import { MovieFormData, movieSchema } from "@/schemas";
@@ -8,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import debounce from "lodash.debounce";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react"; // Add this line
 import { FormProvider, useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 
@@ -43,7 +44,7 @@ export default function HomeScreen() {
       const result = await fetchMovieQuery(
         title || "all",
         typeFilter || "",
-        pageParam,
+        pageParam
       );
       if (result.Response === "False") {
         throw new Error(result.Error);
@@ -76,7 +77,7 @@ export default function HomeScreen() {
       },
       {
         threshold: 1,
-      },
+      }
     );
     if (loadMoreRef.current) observer.observe(loadMoreRef.current);
     return () => observer.disconnect();

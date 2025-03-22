@@ -1,7 +1,6 @@
-"use client";
-
 import { SelectProps } from "@/types";
 import { cssInterop } from "nativewind";
+import React from "react";
 import RNPickerSelect, { PickerSelectProps } from "react-native-picker-select";
 
 export function Select({ className, ...props }: SelectProps) {
@@ -11,7 +10,7 @@ export function Select({ className, ...props }: SelectProps) {
     },
     {
       className: "style",
-    },
+    }
   );
 
   return (

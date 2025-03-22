@@ -1,11 +1,9 @@
-"use client";
-
 import { Button, Footer, LoadingSpinner } from "@/components";
 import { useProtectedRoute, useValidImage } from "@/hooks";
 import { fetchMovieById } from "@/services";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Image, Text, View } from "react-native";
 import { Bar, CartesianChart } from "victory-native";
 

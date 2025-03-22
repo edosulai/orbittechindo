@@ -1,13 +1,12 @@
-"use client";
-
 import { MASONRY_BREAKPOINT_COLUMNS_OBJ } from "@/consts";
 import { MasonryProps, MoviePoster } from "@/types";
 import MasonryList from "@react-native-seoul/masonry-list";
 import { motion } from "framer-motion";
+import React from "react";
 import { Text, View } from "react-native";
 import { MovieCard } from "../molecules";
 
-const MotionView = motion(View);
+const MotionView = motion.create(View);
 
 export function Masonry({ list, handleMovieClick }: MasonryProps) {
   return (

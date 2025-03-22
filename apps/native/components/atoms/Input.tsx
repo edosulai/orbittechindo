@@ -1,6 +1,5 @@
-"use client";
-
 import { InputProps } from "@/types";
+import React from "react";
 import { TextInput } from "react-native";
 
 export function Input({ className, ...props }: InputProps) {

@@ -1,9 +1,7 @@
-"use client";
-
 import { SignupFormData, signupSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import { Button, Input } from "../atoms";

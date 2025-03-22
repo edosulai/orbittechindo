@@ -30,6 +30,10 @@
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
-    "plugins": ["expo-router"]
+    "plugins": ["expo-router"],
+    "extra": {
+      "OMDB_API_KEY": "733acc89",
+      "JWT_KEY": "secret"
+    }
   }
 }

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { View } from "react-native";
 
-const MotionView = motion(View);
+const MotionView = motion.create(View);
 
 export function LoadingSpinner() {
   return (

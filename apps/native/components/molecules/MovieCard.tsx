@@ -1,11 +1,10 @@
-"use client";
-
 import { useValidImage } from "@/hooks";
 import { MovieCardProps } from "@/types";
 import { motion } from "framer-motion";
+import React from "react";
 import { Image, Text, View } from "react-native";
 
-const MotionView = motion(View);
+const MotionView = motion.create(View);
 
 export function MovieCard({ movie, handleMovieClick }: MovieCardProps) {
   const isValidImage = useValidImage(movie.Poster);

@@ -1,6 +1,8 @@
+import Constants from 'expo-constants';
+
 export const OMDB_API_URL = "http://www.omdbapi.com/";
-export const API_KEY = process.env.NEXT_PUBLIC_OMDB_API_KEY || "";
-export const JWT_KEY = process.env.NEXT_PUBLIC_JWT_KEY || "secret";
+export const OMDB_API_KEY = Constants.expoConfig?.extra?.OMDB_API_KEY || "";
+export const JWT_KEY = Constants.expoConfig?.extra?.JWT_KEY || "secret";
 
 export const MOCK_USER = {
   email: "test@example.com",
