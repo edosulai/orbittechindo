@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-function Page() {
+export default function Page() {
     const router = useRouter();
     const methods = useForm<MovieFormData>({
         resolver: zodResolver(movieSchema),
@@ -127,8 +127,6 @@ function Page() {
         <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-4 sm:p-8 md:p-12 lg:p-16 xl:p-20 gap-8 sm:gap-16">
             <FormProvider {...methods}>
                 <MovieHeader
-                    typeFilter={typeFilter}
-                    yearRange={yearRange}
                     handleTitleChange={handleTitleChange}
                     handleTypeFilterChange={handleTypeFilterChange}
                     handleYearRangeChange={handleYearRangeChange}
@@ -143,13 +141,9 @@ function Page() {
 
                 {isLoading && <p>Loading...</p>}
                 {error && <p>{error.message}</p>}
-                {hasNextPage && (
-                    <div ref={loadMoreRef} style={{ height: '50px' }} />
-                )}
+                {hasNextPage && <div ref={loadMoreRef} className="h-14" />}
             </main>
             {!hasNextPage && <Footer />}
         </div>
     );
 }
-
-export default Page;

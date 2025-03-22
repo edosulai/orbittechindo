@@ -1,10 +1,10 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Geist, Geist_Mono } from 'next/font/google';
-import React from 'react';
-import { usePathname } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Geist, Geist_Mono } from 'next/font/google';
+import { usePathname } from 'next/navigation';
+import React from 'react';
 
 import '../styles/globals.css';
 

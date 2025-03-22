@@ -10,15 +10,12 @@ export function MovieCard({ movie, handleMovieClick }: MovieCardProps) {
 
     return (
         <motion.div
-            className="flex flex-col items-center rounded-lg shadow-md p-2"
+            className="flex flex-col items-center rounded-lg shadow-md p-2 cursor-pointer"
             onClick={() => handleMovieClick(movie.imdbID)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
         >
-            <div
-                className="flex flex-col justify-center items-center relative cursor-pointer"
-                onClick={() => handleMovieClick(movie.imdbID)}
-            >
+            <div className="flex flex-col justify-center items-center relative">
                 {isValidImage ? (
                     <Image
                         src={movie.Poster}

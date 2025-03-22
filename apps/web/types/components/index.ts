@@ -1,6 +1,7 @@
 export * from './Button';
 export * from './Carousel';
 export * from './Charts';
+export * from './Dropdown';
 export * from './Input';
 export * from './Label';
 export * from './Masonry';

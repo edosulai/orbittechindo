@@ -2,82 +2,67 @@
 
 import { useAuthStore } from '@/stores';
 import { MovieHeaderProps } from '@/types';
-import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Button, DatePicker, Input, Select } from '../atoms';
+import { DatePicker, Input, Select } from '../atoms';
+import { Dropdown } from '../molecules';
+import Image from 'next/image';
 
 export function MovieHeader({
-    typeFilter,
-    yearRange,
     handleTitleChange,
     handleTypeFilterChange,
     handleYearRangeChange,
 }: MovieHeaderProps) {
     const logout = useAuthStore((state) => state.logout);
-    const { control } = useForm();
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
-    const [title, setTitle] = useState('');
-
-    const toggleDropdown = () => {
-        setDropdownOpen(!dropdownOpen);
-    };
-
-    const handleLogout = () => {
-        logout();
-    };
-
-    const handleClickOutside = (event: MouseEvent) => {
-        if (
-            dropdownRef.current &&
-            !dropdownRef.current.contains(event.target as Node)
-        ) {
-            setDropdownOpen(false);
-        }
-    };
-
-    useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
+    const { control, getValues } = useForm({
+        defaultValues: {
+            title: '',
+            typeFilter: '',
+            startYear: new Date(1900, 0, 1),
+            endYear: new Date(),
+        },
+    });
 
     return (
         <>
             <div className="mx-auto w-full max-w-6xl p-4 rounded-full border">
                 <header className="flex gap-2 items-center justify-between w-full">
-                    <Select
-                        id="typeFilter"
-                        value={typeFilter || ''}
-                        onChange={(e) => handleTypeFilterChange(e.target.value)}
-                    >
-                        <option value="">All</option>
-                        <option value="movie">Movie</option>
-                        <option value="series">Series</option>
-                    </Select>
+                    <Controller
+                        name="typeFilter"
+                        control={control}
+                        render={({ field }) => (
+                            <Select
+                                {...field}
+                                onChange={(e) => {
+                                    field.onChange(e.target.value);
+                                    handleTypeFilterChange(e.target.value);
+                                }}
+                            >
+                                <option value="">All</option>
+                                <option value="movie">Movie</option>
+                                <option value="series">Series</option>
+                            </Select>
+                        )}
+                    />
                     <div className="flex space-x-2">
                         <Controller
                             name="startYear"
                             control={control}
                             render={({ field }) => (
                                 <DatePicker
-                                    {...field}
-                                    selected={new Date(yearRange[0], 0, 1)}
+                                    name={field.name}
+                                    selected={field.value}
                                     onChange={(date) => {
                                         field.onChange(date);
+                                        const { endYear } = getValues();
                                         handleYearRangeChange([
-                                            date
-                                                ? date.getFullYear()
-                                                : yearRange[0],
-                                            yearRange[1],
+                                            date ? date.getFullYear() : 1900,
+                                            endYear.getFullYear(),
                                         ]);
                                     }}
                                     showYearPicker
                                     dateFormat="yyyy"
-                                    minDate={new Date('1900-01-01')}
-                                    maxDate={new Date('2023-12-31')}
+                                    minDate={new Date(1900, 0, 1)}
+                                    maxDate={new Date()}
                                 />
                             )}
                         />
@@ -86,58 +71,57 @@ export function MovieHeader({
                             control={control}
                             render={({ field }) => (
                                 <DatePicker
-                                    {...field}
-                                    selected={new Date(yearRange[1], 11, 31)}
+                                    name={field.name}
+                                    selected={field.value}
                                     onChange={(date) => {
                                         field.onChange(date);
+                                        const { startYear } = getValues();
                                         handleYearRangeChange([
-                                            yearRange[0],
+                                            startYear.getFullYear(),
                                             date
                                                 ? date.getFullYear()
-                                                : yearRange[1],
+                                                : new Date().getFullYear(),
                                         ]);
                                     }}
                                     showYearPicker
                                     dateFormat="yyyy"
-                                    minDate={new Date('1900-01-01')}
-                                    maxDate={new Date('2023-12-31')}
+                                    minDate={new Date(1900, 0, 1)}
+                                    maxDate={new Date()}
                                 />
                             )}
                         />
                     </div>
-                    <Input
-                        type="text"
-                        value={title}
-                        onChange={(e) => {
-                            setTitle(e.target.value);
-                            handleTitleChange(e.target.value);
-                        }}
-                        placeholder="Search by title"
-                    />
-                    <div className="relative" ref={dropdownRef}>
-                        <Button
-                            className="transition-transform transform hover:scale-105"
-                            onClick={toggleDropdown}
-                        >
-                            <Image
-                                src="/vercel.svg"
-                                alt="Account"
-                                width={24}
-                                height={24}
-                                className="object-contain"
+                    <Controller
+                        name="title"
+                        control={control}
+                        render={({ field }) => (
+                            <Input
+                                type="text"
+                                value={field.value}
+                                onChange={(e) => {
+                                    field.onChange(e.target.value);
+                                    handleTitleChange(e.target.value);
+                                }}
+                                placeholder="Search by title"
                             />
-                        </Button>
-                        {dropdownOpen && (
-                            <div className="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
-                                <button
-                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 cursor-pointer"
-                                    onClick={handleLogout}
-                                >
-                                    Logout
-                                </button>
-                            </div>
                         )}
-                    </div>
+                    />
+                    <Dropdown
+                        items={[
+                            {
+                                name: 'Logout',
+                                onClick: logout,
+                            },
+                        ]}
+                    >
+                        <Image
+                            src="/vercel.svg"
+                            alt="Account"
+                            width={24}
+                            height={24}
+                            className="object-contain"
+                        />
+                    </Dropdown>
                 </header>
             </div>
         </>
