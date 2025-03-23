@@ -1,6 +1,6 @@
 import { SignupFormData, signupSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
@@ -14,7 +14,6 @@ export function SignupForm() {
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
   });
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data: SignupFormData) => {

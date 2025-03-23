@@ -1,10 +1,9 @@
 import { useAuthStore } from "@/stores";
 import { DarkTheme, LightTheme } from "@/themes";
 import { MovieHeaderProps } from "@/types";
-import { useRouter } from "expo-router";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Image, StyleSheet, useColorScheme, View } from "react-native";
+import { StyleSheet, useColorScheme, View } from "react-native";
 import { Input, Select } from "../atoms";
 import { Dropdown } from "../molecules";
 
@@ -13,7 +12,6 @@ export function MovieHeader({
   handleTypeFilterChange,
   handleYearRangeChange,
 }: MovieHeaderProps) {
-  const router = useRouter();
   const logout = useAuthStore((state) => state.logout);
   const { control, getValues } = useForm({
     defaultValues: {
@@ -114,7 +112,7 @@ export function MovieHeader({
             items={[
               {
                 name: "Logout",
-                onClick: () => logout(router),
+                onClick: () => logout(),
               },
             ]}
             text=""

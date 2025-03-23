@@ -3,7 +3,7 @@ import { useProtectedRoute, useValidImage } from "@/hooks";
 import { fetchMovieById } from "@/services";
 import { DarkTheme, LightTheme } from "@/themes";
 import { useQuery } from "@tanstack/react-query";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams, router } from "expo-router";
 import React, { useState } from "react";
 import {
   Image,
@@ -16,7 +16,6 @@ import {
 import { Bar, CartesianChart } from "victory-native";
 
 export default function MovieDetailPage() {
-  const router = useRouter();
   const { id } = useLocalSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const colorScheme = useColorScheme();
@@ -42,7 +41,7 @@ export default function MovieDetailPage() {
 
   const { isAuthenticated, authIsLoading, logout } = useProtectedRoute();
   if (!authIsLoading && !isAuthenticated) {
-    logout(router);
+    logout();
   }
 
   const isValidImage = useValidImage(data?.Poster || "");

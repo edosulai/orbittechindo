@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import { useProtectedRoute } from "@/hooks";
 import { LoginForm, Footer } from "@/components";
 
 export default function LoginScreen() {
-  const router = useRouter();
   const { isAuthenticated, authIsLoading } = useProtectedRoute();
 
   useEffect(() => {

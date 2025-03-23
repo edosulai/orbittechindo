@@ -1,20 +1,18 @@
 import { useAuthStore } from "@/stores";
 import { useEffect } from "react";
+import { Platform } from "react-native";
+
+const isWeb = Platform.OS === "web";
 
 export function useProtectedRoute() {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const authIsLoading = useAuthStore((state) => state.isLoading);
-  const logout = useAuthStore((state) => state.logout);
-  const tractAuth = useAuthStore((state) => state.tractAuth);
+  const { isAuthenticated, isLoading: authIsLoading, logout, tractAuth } = useAuthStore();
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      tractAuth();
-    }
+    tractAuth();
   }, [tractAuth]);
 
   return {
-    isAuthenticated: isAuthenticated && typeof window !== "undefined",
+    isAuthenticated: isWeb ? isAuthenticated && typeof window !== "undefined" : isAuthenticated,
     authIsLoading,
     logout,
   };

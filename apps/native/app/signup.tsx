@@ -1,11 +1,10 @@
 import { Footer, SignupForm } from "@/components";
 import { useProtectedRoute } from "@/hooks";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import React, { useEffect } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function SignupScreen() {
-  const router = useRouter();
   const { isAuthenticated, authIsLoading } = useProtectedRoute();
 
   useEffect(() => {

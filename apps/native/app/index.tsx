@@ -6,7 +6,7 @@ import { useMovieStore } from "@/stores";
 import { MoviePoster } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import debounce from "lodash.debounce";
 import React, { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -20,7 +20,6 @@ import {
 } from "react-native"; // Add StyleSheet and ScrollView
 
 export default function HomeScreen() {
-  const router = useRouter();
   const methods = useForm<MovieFormData>({
     resolver: zodResolver(movieSchema),
     defaultValues: useMovieStore.getState(),
@@ -98,7 +97,7 @@ export default function HomeScreen() {
 
   const { isAuthenticated, authIsLoading, logout } = useProtectedRoute();
   if (!authIsLoading && !isAuthenticated) {
-    logout(router);
+    logout();
   }
 
   const handleTitleChange = debounce((value: string) => {

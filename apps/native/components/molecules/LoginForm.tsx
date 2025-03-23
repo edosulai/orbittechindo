@@ -26,9 +26,9 @@ export function LoginForm() {
       if (
         data.email === MOCK_USER.email &&
         data.password === MOCK_USER.password
-      ) {
+      ) {        
         const token = await generateToken(data.email);
-        login(token, router);
+        login(token);
       } else {
         alert("Invalid email or password");
       }
