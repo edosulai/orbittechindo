@@ -1,12 +1,11 @@
-import { DarkTheme, LightTheme } from "@/themes";
-import { FooterProps } from "@/types";
+import { AppTheme, FooterProps } from "@/types";
 import React from "react";
-import { Image, StyleSheet, Text, useColorScheme, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
+import { useTheme } from "styled-components/native";
 import { Anchor } from "../atoms";
 
 export function Footer({ style }: FooterProps) {
-  const colorScheme = useColorScheme();
-  const theme = colorScheme === "dark" ? LightTheme : DarkTheme;
+  const theme = useTheme() as AppTheme;
 
   return (
     <View

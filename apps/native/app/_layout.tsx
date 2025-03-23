@@ -1,4 +1,4 @@
-import { DarkTheme, LightTheme } from "@/themes";
+import { DarkTheme, LightTheme } from "@/consts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { useColorScheme } from "react-native";

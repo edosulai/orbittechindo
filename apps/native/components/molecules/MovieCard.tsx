@@ -1,20 +1,12 @@
 import { useValidImage } from "@/hooks";
-import { DarkTheme, LightTheme } from "@/themes";
-import { MovieCardProps } from "@/types";
+import { AppTheme, MovieCardProps } from "@/types";
 import React from "react";
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  useColorScheme,
-  View,
-} from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useTheme } from "styled-components/native";
 
 export function MovieCard({ movie, handleMovieClick }: MovieCardProps) {
   const isValidImage = useValidImage(movie.Poster);
-  const colorScheme = useColorScheme();
-  const theme = colorScheme === "dark" ? DarkTheme : LightTheme;
+  const theme = useTheme() as AppTheme;
 
   return (
     <TouchableOpacity

@@ -1,15 +1,14 @@
-import { DarkTheme, LightTheme } from "@/themes";
-import { SelectProps } from "@/types";
+import { AppTheme, SelectProps } from "@/types";
 import React from "react";
-import { StyleSheet, useColorScheme, View } from "react-native";
-import RNPickerSelect from "react-native-picker-select";
+import { StyleSheet } from "react-native";
+import RNPickerSelect, { PickerStyle } from "react-native-picker-select";
+import { useTheme } from "styled-components/native";
 
 export function Select({ style, ...props }: SelectProps) {
-  const colorScheme = useColorScheme();
-  const theme = colorScheme === "dark" ? DarkTheme : LightTheme;
+  const theme = useTheme() as AppTheme;
 
   const combinedStyle = StyleSheet.flatten([
-    styles.container,
+    styles.input,
     {
       borderColor: theme.borderColor,
       backgroundColor: theme.background,
@@ -17,37 +16,21 @@ export function Select({ style, ...props }: SelectProps) {
     style,
   ]);
 
-  return (
-    <View style={combinedStyle}>
-      <RNPickerSelect
-        style={{
-          inputIOS: {
-            color: theme.text,
-            ...styles.input,
-          },
-          inputAndroid: {
-            color: theme.text,
-            ...styles.input,
-          },
-        }}
-        {...props}
-      />
-    </View>
-  );
+  return <RNPickerSelect style={combinedStyle as PickerStyle} {...props} />;
 }
 
 const styles = StyleSheet.create({
-  container: {
+  input: {
     borderRadius: 9999,
     borderWidth: 1,
+    borderColor: "rgba(0, 0, 0, 0.08)",
+    display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    height: 40,
-    paddingHorizontal: 16,
-    width: "100%",
-  },
-  input: {
-    fontSize: 14,
     fontWeight: "500",
+    fontSize: 14,
+    height: 40,
+    padding: 16,
+    width: "100%",
   },
 });

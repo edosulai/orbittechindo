@@ -1,6 +1,6 @@
-import { InputProps } from "@/types";
+import { AppTheme, InputProps } from "@/types";
 import React from "react";
-import { StyleSheet, TextInput, useWindowDimensions } from "react-native";
+import { StyleSheet, TextInput } from "react-native";
 import { useTheme } from "styled-components/native";
 
 const styles = StyleSheet.create({
@@ -17,26 +17,17 @@ const styles = StyleSheet.create({
     padding: 16,
     width: "100%",
   },
-  inputSm: {
-    fontSize: 16,
-    height: 48,
-    padding: 20,
-  },
 });
 
 export function Input({ style, ...props }: InputProps) {
-  const theme = useTheme(); // Use theme from styled-components
-  const { width } = useWindowDimensions(); // Get screen width
-
-  const isSmallScreen = width < 375; // Define small screen threshold
+  const theme = useTheme() as AppTheme;
 
   const combinedStyle = StyleSheet.flatten([
     styles.input,
     {
       borderColor: theme.borderColor,
-      backgroundColor: theme.backgroundColor,
-    }, // Apply theme styles
-    isSmallScreen && styles.inputSm,
+      backgroundColor: theme.background,
+    },
     style,
   ]);
 

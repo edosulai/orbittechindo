@@ -1,4 +1,4 @@
-import { DropdownProps } from "@/types";
+import { AppTheme, DropdownProps } from "@/types";
 import React, { useRef, useState } from "react";
 import {
   StyleSheet,
@@ -13,7 +13,7 @@ import { Button } from "../atoms";
 export function Dropdown({ items, text }: DropdownProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<View>(null);
-  const theme = useTheme();
+  const theme = useTheme() as AppTheme;
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -29,10 +29,7 @@ export function Dropdown({ items, text }: DropdownProps) {
         <Button text={text} style={styles.button} onPress={toggleDropdown} />
         {dropdownOpen && (
           <View
-            style={[
-              styles.dropdown,
-              { backgroundColor: theme.colors.background },
-            ]}
+            style={[styles.dropdown, { backgroundColor: theme.background }]}
           >
             {items.map((item, index) => (
               <TouchableOpacity
@@ -40,7 +37,7 @@ export function Dropdown({ items, text }: DropdownProps) {
                 style={styles.item}
                 onPress={item.onClick}
               >
-                <Text style={[styles.itemText, { color: theme.colors.text }]}>
+                <Text style={[styles.itemText, { color: theme.text }]}>
                   {item.name}
                 </Text>
               </TouchableOpacity>

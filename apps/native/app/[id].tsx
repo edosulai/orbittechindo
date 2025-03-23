@@ -1,25 +1,18 @@
 import { Button, Footer, LoadingSpinner } from "@/components";
 import { useProtectedRoute, useValidImage } from "@/hooks";
 import { fetchMovieById } from "@/services";
-import { DarkTheme, LightTheme } from "@/themes";
+import { AppTheme } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-import { useLocalSearchParams, router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useTheme } from "styled-components/native";
 import { Bar, CartesianChart } from "victory-native";
 
 export default function MovieDetailPage() {
   const { id } = useLocalSearchParams();
   const [isLoading, setIsLoading] = useState(false);
-  const colorScheme = useColorScheme();
-  const theme = colorScheme === "dark" ? DarkTheme : LightTheme;
+  const theme = useTheme() as AppTheme;
 
   const {
     data,
