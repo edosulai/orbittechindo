@@ -1,7 +1,9 @@
 import { CarouselProps } from "@/types";
+import { MotiView } from "moti";
 import React, { useEffect, useState } from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, View } from "react-native";
 import RNCarousel from "react-native-reanimated-carousel";
+import tw from "twrnc";
 import { MovieCard } from "../molecules";
 
 export function Carousel({ list, handleMovieClick }: CarouselProps) {
@@ -31,13 +33,24 @@ export function Carousel({ list, handleMovieClick }: CarouselProps) {
   }, []);
 
   return (
-    <RNCarousel
-      width={300}
-      height={400}
-      data={list.slice(0, itemsToShow)}
-      renderItem={({ item: movie, index }) => (
-        <MovieCard movie={movie} handleMovieClick={handleMovieClick} />
-      )}
-    />
+    <View style={tw`overflow-hidden w-full`}>
+      <MotiView style={tw`flex justify-center items-center`}>
+        <RNCarousel
+          width={300}
+          height={400}
+          data={list.slice(0, itemsToShow)}
+          renderItem={({ item: movie, index }) => (
+            <MotiView
+              key={index}
+              from={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <MovieCard movie={movie} handleMovieClick={handleMovieClick} />
+            </MotiView>
+          )}
+        />
+      </MotiView>
+    </View>
   );
 }

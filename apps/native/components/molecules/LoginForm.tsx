@@ -3,10 +3,10 @@ import { LoginFormData, loginSchema } from "@/schemas";
 import { useAuthStore } from "@/stores";
 import { generateToken } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { router } from "expo-router";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
+import tw from "twrnc";
 import { Button, Input } from "../atoms";
 
 export function LoginForm() {
@@ -26,7 +26,7 @@ export function LoginForm() {
       if (
         data.email === MOCK_USER.email &&
         data.password === MOCK_USER.password
-      ) {        
+      ) {
         const token = await generateToken(data.email);
         login(token);
       } else {
@@ -40,7 +40,7 @@ export function LoginForm() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={tw`flex flex-col gap-4`}>
       <Controller
         control={control}
         name="email"
@@ -55,7 +55,7 @@ export function LoginForm() {
         )}
       />
       {errors.email && (
-        <Text style={styles.errorText}>{errors.email.message}</Text>
+        <Text style={tw`text-red-500`}>{errors.email.message}</Text>
       )}
       <Controller
         control={control}
@@ -71,28 +71,15 @@ export function LoginForm() {
         )}
       />
       {errors.password && (
-        <Text style={styles.errorText}>{errors.password.message}</Text>
+        <Text style={tw`text-red-500`}>{errors.password.message}</Text>
       )}
       <Button
         isLoading={isLoading}
-        style={styles.button}
-        text="Login"
+        style={tw`transition-transform transform hover:scale-105`}
         onPress={handleSubmit(onSubmit)}
-      />
+      >
+        <Text style={tw`text-white`}>Login</Text>
+      </Button>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "column",
-    gap: 16,
-  },
-  errorText: {
-    color: "red",
-  },
-  button: {
-    transform: "scale(1.05)",
-  },
-});

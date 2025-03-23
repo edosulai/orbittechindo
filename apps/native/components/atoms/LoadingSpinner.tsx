@@ -1,30 +1,18 @@
+import { MotiView } from "moti";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
+import tw from "twrnc";
 
 export function LoadingSpinner() {
   return (
-    <View style={styles.container}>
-      <View style={styles.spinner}></View>
-    </View>
+    <MotiView
+      style={tw`fixed inset-0 flex justify-center items-center bg-background z-50`}
+      animate={{ rotate: "360deg" }}
+      transition={{ repeat: Infinity, duration: 1, type: "timing" }}
+    >
+      <View
+        style={tw`w-16 h-16 border-4 border-blue-500 border-t-transparent border-solid rounded-full`}
+      />
+    </MotiView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    position: "static",
-    inset: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "background",
-    zIndex: 50,
-  },
-  spinner: {
-    width: 64,
-    height: 64,
-    borderWidth: 4,
-    borderColor: "blue",
-    borderTopColor: "transparent",
-    borderStyle: "solid",
-    borderRadius: 32,
-  },
-});

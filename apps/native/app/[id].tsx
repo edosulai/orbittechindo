@@ -1,18 +1,16 @@
 import { Button, Footer, LoadingSpinner } from "@/components";
 import { useProtectedRoute, useValidImage } from "@/hooks";
 import { fetchMovieById } from "@/services";
-import { AppTheme } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
-import { useTheme } from "styled-components/native";
+import { Image, ScrollView, Text, View } from "react-native";
+import tw from "twrnc";
 import { Bar, CartesianChart } from "victory-native";
 
 export default function MovieDetailPage() {
   const { id } = useLocalSearchParams();
   const [isLoading, setIsLoading] = useState(false);
-  const theme = useTheme() as AppTheme;
 
   const {
     data,
@@ -66,47 +64,56 @@ export default function MovieDetailPage() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.innerContainer}>
-        <Button onPress={handleBackClick} isLoading={isLoading} text="Back" />
-        <Text style={[styles.title, { color: theme.text }]}>{data.Title}</Text>
-        <View style={styles.movieInfoContainer}>
+    <ScrollView
+      contentContainerStyle={tw`grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-4 sm:p-8 md:p-12 lg:p-16 xl:p-20 gap-8 sm:gap-16`}
+    >
+      <View
+        style={tw`flex flex-col gap-8 row-start-2 items-center sm:items-start`}
+      >
+        <Button onPress={handleBackClick} isLoading={isLoading}>
+          <Text>Back</Text>
+        </Button>
+        <Text style={tw`text-2xl sm:text-3xl font-bold`}>{data.Title}</Text>
+        <View style={tw`flex flex-col sm:flex-row gap-4`}>
           {isValidImage ? (
-            <Image source={{ uri: data.Poster }} style={styles.image} />
+            <Image
+              source={{ uri: data.Poster }}
+              style={tw`rounded-lg shadow-md`}
+            />
           ) : (
-            <View style={styles.imagePlaceholder}>
-              <Text
-                style={[styles.imagePlaceholderText, { color: theme.text }]}
-              >
-                Image Not Available
-              </Text>
+            <View
+              style={tw`w-[200px] h-[300px] flex items-center justify-center bg-gray-200 rounded-md`}
+            >
+              <Text style={tw`text-gray-900`}>Image Not Available</Text>
             </View>
           )}
-          <View style={styles.movieDetails}>
-            <Text style={[styles.detailText, { color: theme.text }]}>
-              <Text style={styles.boldText}>Year:</Text> {data.Year}
+          <View style={tw`space-y-2`}>
+            <Text>
+              <Text style={tw`font-bold`}>Year:</Text> {data.Year}
             </Text>
-            <Text style={[styles.detailText, { color: theme.text }]}>
-              <Text style={styles.boldText}>Genre:</Text> {data.Genre}
+            <Text>
+              <Text style={tw`font-bold`}>Genre:</Text> {data.Genre}
             </Text>
-            <Text style={[styles.detailText, { color: theme.text }]}>
-              <Text style={styles.boldText}>Rating:</Text> {data.imdbRating}
+            <Text>
+              <Text style={tw`font-bold`}>Rating:</Text> {data.imdbRating}
             </Text>
-            <Text style={[styles.detailText, { color: theme.text }]}>
-              <Text style={styles.boldText}>Plot:</Text> {data.Plot}
+            <Text>
+              <Text style={tw`font-bold`}>Plot:</Text> {data.Plot}
             </Text>
-            <Text style={[styles.detailText, { color: theme.text }]}>
-              <Text style={styles.boldText}>Cast:</Text> {data.Actors}
+            <Text>
+              <Text style={tw`font-bold`}>Cast:</Text> {data.Actors}
             </Text>
           </View>
         </View>
 
-        <View style={styles.chartContainer}>
+        <View style={tw`flex flex-col sm:flex-row gap-8`}>
           <View>
-            <Text style={[styles.chartTitle, { color: theme.text }]}>
+            <Text
+              style={tw`text-xl sm:text-2xl font-semibold mt-8 text-center`}
+            >
               Genre Distribution
             </Text>
-            <View style={styles.chart}>
+            <View style={tw`w-full max-w-full overflow-x-auto`}>
               <CartesianChart data={genreData} xKey="genre" yKeys={["count"]}>
                 {({ points, chartBounds }) => (
                   <Bar
@@ -121,10 +128,12 @@ export default function MovieDetailPage() {
           </View>
 
           <View>
-            <Text style={[styles.chartTitle, { color: theme.text }]}>
+            <Text
+              style={tw`text-xl sm:text-2xl font-semibold mt-8 text-center`}
+            >
               Ratings Distribution
             </Text>
-            <View style={styles.chart}>
+            <View style={tw`w-full max-w-full overflow-x-auto`}>
               <CartesianChart data={ratingData} xKey="source" yKeys={["value"]}>
                 {({ points, chartBounds }) => (
                   <Bar
@@ -143,73 +152,3 @@ export default function MovieDetailPage() {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    padding: 16,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  innerContainer: {
-    flex: 1,
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginVertical: 16,
-  },
-  movieInfoContainer: {
-    flexDirection: "row",
-    gap: 16,
-    marginBottom: 16,
-  },
-  image: {
-    width: 200,
-    height: 300,
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-  },
-  imagePlaceholder: {
-    width: 200,
-    height: 300,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#ccc",
-    borderRadius: 8,
-  },
-  imagePlaceholderText: {
-    color: "#000",
-  },
-  movieDetails: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  detailText: {
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  boldText: {
-    fontWeight: "bold",
-  },
-  chartContainer: {
-    flexDirection: "row",
-    gap: 16,
-    marginTop: 16,
-  },
-  chartTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 8,
-  },
-  chart: {
-    width: "100%",
-    maxWidth: "100%",
-    overflow: "hidden",
-  },
-});

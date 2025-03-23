@@ -9,5 +9,4 @@ export * from "./Masonry";
 export * from "./MovieCard";
 export * from "./MovieHeader";
 export * from "./Select";
-export * from "./Footer";
 export * from "./AppTheme";

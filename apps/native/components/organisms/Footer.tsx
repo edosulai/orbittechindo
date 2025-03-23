@@ -1,56 +1,37 @@
-import { AppTheme, FooterProps } from "@/types";
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import { useTheme } from "styled-components/native";
+import { Image, StyleSheet, Text, View, ViewStyle } from "react-native";
+import tw from "twrnc";
 import { Anchor } from "../atoms";
 
-export function Footer({ style }: FooterProps) {
-  const theme = useTheme() as AppTheme;
-
+export function Footer() {
   return (
-    <View
-      style={[styles.container, { backgroundColor: theme.background }, style]}
-    >
+    <View style={tw`row-start-3 flex gap-[24px] flex-wrap items-center justify-center`}>
       <Anchor
-        style={styles.anchor}
+        style={tw`flex items-center gap-2 hover:underline hover:underline-offset-4`}
         url="https://github.com/edosulai/orbittechindo"
       >
         <Image
           aria-hidden
-          source={require("../../assets/file.svg")}
+          src="/file.svg"
           alt="File icon"
-          style={styles.icon}
+          width={16}
+          height={16}
         />
-        <Text style={{ color: theme.text }}>Source Code</Text>
+        <Text>Source Code</Text>
       </Anchor>
-      <Anchor style={styles.anchor} url="https://edosulai.github.io">
+      <Anchor
+        style={tw`flex items-center gap-2 hover:underline hover:underline-offset-4`}
+        url="https://edosulai.github.io"
+      >
         <Image
           aria-hidden
-          source={require("../../assets/globe.svg")}
+          src="/globe.svg"
           alt="Globe icon"
-          style={styles.icon}
+          width={16}
+          height={16}
         />
-        <Text style={{ color: theme.text }}>Go to edosulai.github.io →</Text>
+        <Text>Go to edosulai.github.io →</Text>
       </Anchor>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 24,
-  },
-  anchor: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  icon: {
-    width: 16,
-    height: 16,
-  },
-});

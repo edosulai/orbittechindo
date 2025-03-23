@@ -14,10 +14,10 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   ScrollView,
-  StyleSheet,
   Text,
   View,
-} from "react-native"; // Add StyleSheet and ScrollView
+} from "react-native";
+import tw from "twrnc";
 
 export default function HomeScreen() {
   const methods = useForm<MovieFormData>({
@@ -118,7 +118,7 @@ export default function HomeScreen() {
 
   return (
     <ScrollView
-      contentContainerStyle={styles.container}
+      contentContainerStyle={tw`grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-4 sm:p-8 md:p-12 lg:p-16 xl:p-20 gap-8 sm:gap-16`}
       onScroll={handleScroll}
       scrollEventThrottle={400}
     >
@@ -129,7 +129,9 @@ export default function HomeScreen() {
           handleYearRangeChange={handleYearRangeChange}
         />
       </FormProvider>
-      <View style={styles.content}>
+      <View
+        style={tw`flex flex-col gap-8 sm:gap-16 row-start-2 items-center justify-center`}
+      >
         <Carousel
           list={movies.slice(0, 5)}
           handleMovieClick={handleMovieClick}
@@ -138,28 +140,9 @@ export default function HomeScreen() {
 
         {isLoading && <Text>Loading...</Text>}
         {error && <Text>{error.message}</Text>}
-        {hasNextPage && <View ref={loadMoreRef} style={styles.loadMore} />}
+        {hasNextPage && <View ref={loadMoreRef} style={tw`h-14`} />}
       </View>
       {!hasNextPage && <Footer />}
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 16,
-    gap: 16,
-  },
-  content: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 16,
-  },
-  loadMore: {
-    height: 56,
-  },
-});

@@ -1,36 +1,14 @@
-import { AppTheme, SelectProps } from "@/types";
+import { SelectProps } from "@/types";
 import React from "react";
 import { StyleSheet } from "react-native";
 import RNPickerSelect, { PickerStyle } from "react-native-picker-select";
-import { useTheme } from "styled-components/native";
+import tw from "twrnc";
 
 export function Select({ style, ...props }: SelectProps) {
-  const theme = useTheme() as AppTheme;
-
   const combinedStyle = StyleSheet.flatten([
-    styles.input,
-    {
-      borderColor: theme.borderColor,
-      backgroundColor: theme.background,
-    },
+    tw`rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full`,
     style,
   ]);
 
   return <RNPickerSelect style={combinedStyle as PickerStyle} {...props} />;
 }
-
-const styles = StyleSheet.create({
-  input: {
-    borderRadius: 9999,
-    borderWidth: 1,
-    borderColor: "rgba(0, 0, 0, 0.08)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontWeight: "500",
-    fontSize: 14,
-    height: 40,
-    padding: 16,
-    width: "100%",
-  },
-});

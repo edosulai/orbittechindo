@@ -1,9 +1,10 @@
 import { useAuthStore } from "@/stores";
-import { AppTheme, MovieHeaderProps } from "@/types";
+import { MovieHeaderProps } from "@/types";
+import { Image } from "moti";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { StyleSheet, View } from "react-native";
-import { useTheme } from "styled-components/native";
+import { View } from "react-native";
+import tw from "twrnc";
 import { Input, Select } from "../atoms";
 import { Dropdown } from "../molecules";
 
@@ -22,11 +23,9 @@ export function MovieHeader({
     },
   });
 
-  const theme = useTheme() as AppTheme;
-
   return (
-    <View style={[styles.container, { borderColor: theme.borderColor }]}>
-      <View style={styles.innerContainer}>
+    <View style={tw`mx-auto w-full max-w-6xl p-4 rounded-full border`}>
+      <View style={tw`flex gap-2 items-center justify-between w-full`}>
         <Controller
           name="typeFilter"
           control={control}
@@ -45,7 +44,7 @@ export function MovieHeader({
             />
           )}
         />
-        <View style={styles.yearContainer}>
+        <View style={tw`flex space-x-2`}>
           <Controller
             name="startYear"
             control={control}
@@ -113,36 +112,16 @@ export function MovieHeader({
               onClick: () => logout(),
             },
           ]}
-          text=""
-        />
+        >
+          <Image
+            src="/vercel.svg"
+            alt="Account"
+            width={24}
+            height={24}
+            style={tw`object-contain`}
+          />
+        </Dropdown>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginHorizontal: "auto",
-    width: "100%",
-    maxWidth: 960,
-    padding: 16,
-    borderRadius: 9999,
-    borderWidth: 1,
-  },
-  innerContainer: {
-    flexDirection: "row",
-    gap: 8,
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: "100%",
-  },
-  yearContainer: {
-    flexDirection: "row",
-    marginRight: 8,
-  },
-  image: {
-    width: 24,
-    height: 24,
-    resizeMode: "contain",
-  },
-});

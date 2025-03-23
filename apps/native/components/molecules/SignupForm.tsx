@@ -4,6 +4,7 @@ import { router } from "expo-router";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
+import tw from "twrnc";
 import { Button, Input } from "../atoms";
 
 export function SignupForm() {
@@ -31,7 +32,7 @@ export function SignupForm() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={tw`flex flex-col gap-4`}>
       <Controller
         control={control}
         name="name"
@@ -45,7 +46,7 @@ export function SignupForm() {
         )}
       />
       {errors.name && (
-        <Text style={styles.errorText}>{errors.name.message}</Text>
+        <Text style={tw`text-red-500`}>{errors.name.message}</Text>
       )}
 
       <Controller
@@ -63,7 +64,7 @@ export function SignupForm() {
         )}
       />
       {errors.email && (
-        <Text style={styles.errorText}>{errors.email.message}</Text>
+        <Text style={tw`text-red-500`}>{errors.email.message}</Text>
       )}
 
       <Controller
@@ -80,7 +81,7 @@ export function SignupForm() {
         )}
       />
       {errors.password && (
-        <Text style={styles.errorText}>{errors.password.message}</Text>
+        <Text style={tw`text-red-500`}>{errors.password.message}</Text>
       )}
 
       <Controller
@@ -96,29 +97,16 @@ export function SignupForm() {
         )}
       />
       {errors.phone && (
-        <Text style={styles.errorText}>{errors.phone.message}</Text>
+        <Text style={tw`text-red-500`}>{errors.phone.message}</Text>
       )}
 
       <Button
         onPress={handleSubmit(onSubmit)}
         isLoading={isLoading}
-        style={styles.button}
-        text="Signup"
-      />
+        style={tw`transition-transform transform hover:scale-105`}
+      >
+        <Text style={tw`text-white`}>Login</Text>
+      </Button>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "column",
-    gap: 16,
-  },
-  errorText: {
-    color: "red",
-  },
-  button: {
-    transform: "scale(1.05)",
-  },
-});
