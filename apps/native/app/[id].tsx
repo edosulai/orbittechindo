@@ -1,16 +1,26 @@
 import { Button, Footer, LoadingSpinner } from "@/components";
 import { useProtectedRoute, useValidImage } from "@/hooks";
 import { fetchMovieById } from "@/services";
+import { DarkTheme, LightTheme } from "@/themes";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Image, Text, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
+} from "react-native";
 import { Bar, CartesianChart } from "victory-native";
 
-function MovieDetailPage() {
+export default function MovieDetailPage() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const [isLoading, setIsLoading] = useState(false);
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === "dark" ? DarkTheme : LightTheme;
 
   const {
     data,
@@ -32,7 +42,7 @@ function MovieDetailPage() {
 
   const { isAuthenticated, authIsLoading, logout } = useProtectedRoute();
   if (!authIsLoading && !isAuthenticated) {
-    logout();
+    logout(router);
   }
 
   const isValidImage = useValidImage(data?.Poster || "");
@@ -64,51 +74,47 @@ function MovieDetailPage() {
   };
 
   return (
-    <View className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-4 sm:p-8 md:p-12 lg:p-16 xl:p-20 gap-8 sm:gap-16">
-      <View className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Button onPress={handleBackClick} isLoading={isLoading}>
-          <Text>Back</Text>
-        </Button>
-        <h1 className="text-2xl sm:text-3xl font-bold">{data.Title}</h1>
-        <View className="flex flex-col sm:flex-row gap-4">
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.innerContainer}>
+        <Button onPress={handleBackClick} isLoading={isLoading} text="Back" />
+        <Text style={[styles.title, { color: theme.text }]}>{data.Title}</Text>
+        <View style={styles.movieInfoContainer}>
           {isValidImage ? (
-            <Image
-              src={data.Poster}
-              alt={data.Title}
-              width={200}
-              height={300}
-              className="rounded-lg shadow-md"
-            />
+            <Image source={{ uri: data.Poster }} style={styles.image} />
           ) : (
-            <View className="w-[200px] h-[300px] flex items-center justify-center bg-gray-200 rounded-md">
-              <Text className="text-gray-900">Image Not Available</Text>
+            <View style={styles.imagePlaceholder}>
+              <Text
+                style={[styles.imagePlaceholderText, { color: theme.text }]}
+              >
+                Image Not Available
+              </Text>
             </View>
           )}
-          <View className="space-y-2">
-            <Text>
-              <Text className="font-bold">Year:</Text> {data.Year}
+          <View style={styles.movieDetails}>
+            <Text style={[styles.detailText, { color: theme.text }]}>
+              <Text style={styles.boldText}>Year:</Text> {data.Year}
             </Text>
-            <Text>
-              <Text className="font-bold">Genre:</Text> {data.Genre}
+            <Text style={[styles.detailText, { color: theme.text }]}>
+              <Text style={styles.boldText}>Genre:</Text> {data.Genre}
             </Text>
-            <Text>
-              <Text className="font-bold">Rating:</Text> {data.imdbRating}
+            <Text style={[styles.detailText, { color: theme.text }]}>
+              <Text style={styles.boldText}>Rating:</Text> {data.imdbRating}
             </Text>
-            <Text>
-              <Text className="font-bold">Plot:</Text> {data.Plot}
+            <Text style={[styles.detailText, { color: theme.text }]}>
+              <Text style={styles.boldText}>Plot:</Text> {data.Plot}
             </Text>
-            <Text>
-              <Text className="font-bold">Cast:</Text> {data.Actors}
+            <Text style={[styles.detailText, { color: theme.text }]}>
+              <Text style={styles.boldText}>Cast:</Text> {data.Actors}
             </Text>
           </View>
         </View>
 
-        <View className="flex flex-col sm:flex-row gap-8">
+        <View style={styles.chartContainer}>
           <View>
-            <Text className="text-xl sm:text-2xl font-semibold mt-8 text-center">
+            <Text style={[styles.chartTitle, { color: theme.text }]}>
               Genre Distribution
             </Text>
-            <View className="w-full max-w-full overflow-x-auto">
+            <View style={styles.chart}>
               <CartesianChart data={genreData} xKey="genre" yKeys={["count"]}>
                 {({ points, chartBounds }) => (
                   <Bar
@@ -123,10 +129,10 @@ function MovieDetailPage() {
           </View>
 
           <View>
-            <Text className="text-xl sm:text-2xl font-semibold mt-8 text-center">
+            <Text style={[styles.chartTitle, { color: theme.text }]}>
               Ratings Distribution
             </Text>
-            <View className="w-full max-w-full overflow-x-auto">
+            <View style={styles.chart}>
               <CartesianChart data={ratingData} xKey="source" yKeys={["value"]}>
                 {({ points, chartBounds }) => (
                   <Bar
@@ -142,8 +148,76 @@ function MovieDetailPage() {
         </View>
       </View>
       <Footer />
-    </View>
+    </ScrollView>
   );
 }
 
-export default MovieDetailPage;
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    padding: 16,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  innerContainer: {
+    flex: 1,
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginVertical: 16,
+  },
+  movieInfoContainer: {
+    flexDirection: "row",
+    gap: 16,
+    marginBottom: 16,
+  },
+  image: {
+    width: 200,
+    height: 300,
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+  },
+  imagePlaceholder: {
+    width: 200,
+    height: 300,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ccc",
+    borderRadius: 8,
+  },
+  imagePlaceholderText: {
+    color: "#000",
+  },
+  movieDetails: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  detailText: {
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  boldText: {
+    fontWeight: "bold",
+  },
+  chartContainer: {
+    flexDirection: "row",
+    gap: 16,
+    marginTop: 16,
+  },
+  chartTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 8,
+  },
+  chart: {
+    width: "100%",
+    maxWidth: "100%",
+    overflow: "hidden",
+  },
+});

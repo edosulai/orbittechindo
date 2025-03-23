@@ -1,24 +1,55 @@
 import { Footer, SignupForm } from "@/components";
 import { useProtectedRoute } from "@/hooks";
 import { useRouter } from "expo-router";
-import React from "react";
-import { Text, View } from "react-native";
+import React, { useEffect } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function SignupScreen() {
   const router = useRouter();
   const { isAuthenticated, authIsLoading } = useProtectedRoute();
 
-  if (!authIsLoading && isAuthenticated) {
-    router.replace("/");
-  }
+  useEffect(() => {
+    if (!authIsLoading && isAuthenticated) {
+      router.replace("/");
+    }
+  }, [authIsLoading, isAuthenticated, router]);
 
   return (
-    <View className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-4 sm:p-8 md:p-12 lg:p-16 xl:p-20 gap-8 sm:gap-16">
-      <View className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Text className="text-2xl sm:text-3xl font-bold">Sign Up</Text>
-        <SignupForm />
-      </View>
-      <Footer />
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.content}>
+          <Text style={styles.title}>Login</Text>
+          <SignupForm />
+        </View>
+      </ScrollView>
+      <Footer style={styles.footer} />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
+  },
+  content: {
+    alignItems: "center",
+    width: "100%",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 16,
+  },
+  footer: {
+    position: "absolute",
+    bottom: 40,
+    width: "100%",
+  },
+});

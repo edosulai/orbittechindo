@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Button, Input } from "../atoms";
 
 export function SignupForm() {
@@ -32,7 +32,7 @@ export function SignupForm() {
   };
 
   return (
-    <View className="flex flex-col gap-4">
+    <View style={styles.container}>
       <Controller
         control={control}
         name="name"
@@ -46,7 +46,7 @@ export function SignupForm() {
         )}
       />
       {errors.name && (
-        <Text className="text-red-500">{errors.name.message}</Text>
+        <Text style={styles.errorText}>{errors.name.message}</Text>
       )}
 
       <Controller
@@ -64,7 +64,7 @@ export function SignupForm() {
         )}
       />
       {errors.email && (
-        <Text className="text-red-500">{errors.email.message}</Text>
+        <Text style={styles.errorText}>{errors.email.message}</Text>
       )}
 
       <Controller
@@ -81,7 +81,7 @@ export function SignupForm() {
         )}
       />
       {errors.password && (
-        <Text className="text-red-500">{errors.password.message}</Text>
+        <Text style={styles.errorText}>{errors.password.message}</Text>
       )}
 
       <Controller
@@ -97,16 +97,29 @@ export function SignupForm() {
         )}
       />
       {errors.phone && (
-        <Text className="text-red-500">{errors.phone.message}</Text>
+        <Text style={styles.errorText}>{errors.phone.message}</Text>
       )}
 
       <Button
         onPress={handleSubmit(onSubmit)}
         isLoading={isLoading}
-        className="transition-transform transform hover:scale-105"
-      >
-        <Text>Signup</Text>
-      </Button>
+        style={styles.button}
+        text="Signup"
+      />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    gap: 16,
+  },
+  errorText: {
+    color: "red",
+  },
+  button: {
+    transform: "scale(1.05)",
+  },
+});

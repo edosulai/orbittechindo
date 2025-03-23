@@ -1,16 +1,30 @@
-import { motion } from "framer-motion";
-import { View } from "react-native";
-
-const MotionView = motion.create(View);
+import React from "react";
+import { StyleSheet, View } from "react-native";
 
 export function LoadingSpinner() {
   return (
-    <MotionView
-      className="fixed inset-0 flex justify-center items-center bg-background z-50"
-      animate={{ rotate: 360 }}
-      transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-    >
-      <View className="w-16 h-16 border-4 border-blue-500 border-t-transparent border-solid rounded-full"></View>
-    </MotionView>
+    <View style={styles.container}>
+      <View style={styles.spinner}></View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    position: "static",
+    inset: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "background",
+    zIndex: 50,
+  },
+  spinner: {
+    width: 64,
+    height: 64,
+    borderWidth: 4,
+    borderColor: "blue",
+    borderTopColor: "transparent",
+    borderStyle: "solid",
+    borderRadius: 32,
+  },
+});

@@ -4,6 +4,6 @@ interface Item {
 }
 
 export interface DropdownProps {
-  children: React.ReactNode;
+  text: string;
   items: Item[];
 }

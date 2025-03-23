@@ -1,39 +1,62 @@
 import { ButtonProps } from "@/types";
-import { motion } from "framer-motion";
-import React, { Children, Fragment } from "react";
-import { TouchableWithoutFeedback, View } from "react-native";
+import React from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useTheme } from "styled-components/native";
 
-const MotionButton = motion.create(TouchableWithoutFeedback);
-const MotionView = motion.create(View);
+export function Button({ style, isLoading, text, ...props }: ButtonProps) {
+  const theme = useTheme();
 
-export function Button({
-  className,
-  isLoading,
-  children,
-  ...props
-}: ButtonProps) {
+  const backgroundColor = theme?.colors?.foreground || "#000";
+  const textColor = theme?.colors?.background || "#fff";
+  const borderColor = theme?.colors?.blue || "#0000ff";
+
+  const combinedButtonStyle = StyleSheet.flatten([
+    styles.button,
+    {
+      backgroundColor,
+      color: textColor,
+    },
+    style,
+  ]);
+
+  const combinedViewStyle = StyleSheet.flatten([
+    styles.spinner,
+    { borderColor },
+  ]);
+
   return (
-    <MotionButton
-      className={`rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto ${className}`}
-      disabled={isLoading}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      {...props}
-    >
-      <Fragment>
-        {Children.only(children)}
-        {isLoading && (
-          <MotionView
-            className="w-5 h-5 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"
-            animate={{ rotate: 360 }}
-            transition={{
-              repeat: Infinity,
-              duration: 1,
-              ease: "linear",
-            }}
-          />
-        )}
-      </Fragment>
-    </MotionButton>
+    <Pressable style={combinedButtonStyle} disabled={isLoading} {...props}>
+      <View style={styles.wrapper}>
+        <Text style={{ color: textColor }}>{text}</Text>
+        {isLoading && <View style={combinedViewStyle} />}
+      </View>
+    </Pressable>
   );
 }
+
+const styles = StyleSheet.create({
+  button: {
+    borderRadius: 9999,
+    borderWidth: 1,
+    borderColor: "transparent",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    fontSize: 14,
+    height: 40,
+    paddingHorizontal: 16,
+  },
+  wrapper: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 8,
+  },
+  spinner: {
+    width: 20,
+    height: 20,
+    borderWidth: 4,
+    borderTopColor: "transparent",
+    borderRadius: 9999,
+  },
+});

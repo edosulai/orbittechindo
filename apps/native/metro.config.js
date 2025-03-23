@@ -1,7 +1,5 @@
 // Learn more https://docs.expo.io/guides/customizing-metro
 const { getDefaultConfig } = require("expo/metro-config");
-const { wrapWithReanimatedMetroConfig } = require('react-native-reanimated/metro-config');
-const { withNativeWind } = require("nativewind/metro");
 const path = require("path");
 
 // Find the workspace root, this can be replaced with `find-yarn-workspace-root`
@@ -20,4 +18,4 @@ config.resolver.nodeModulesPaths = [
 // 3. Force Metro to resolve (sub)dependencies only from the `nodeModulesPaths`
 config.resolver.disableHierarchicalLookup = true;
 
-module.exports = withNativeWind(wrapWithReanimatedMetroConfig(config), { input: "./styles/globals.css" })
+module.exports = config;

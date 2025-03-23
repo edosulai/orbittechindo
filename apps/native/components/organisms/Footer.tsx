@@ -1,36 +1,57 @@
+import { DarkTheme, LightTheme } from "@/themes";
+import { FooterProps } from "@/types";
 import React from "react";
-import { Image, Text, View } from "react-native";
+import { Image, StyleSheet, Text, useColorScheme, View } from "react-native";
 import { Anchor } from "../atoms";
 
-export function Footer() {
+export function Footer({ style }: FooterProps) {
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === "dark" ? LightTheme : DarkTheme;
+
   return (
-    <View className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
+    <View
+      style={[styles.container, { backgroundColor: theme.background }, style]}
+    >
       <Anchor
-        className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+        style={styles.anchor}
         url="https://github.com/edosulai/orbittechindo"
       >
         <Image
           aria-hidden
-          src="/file.svg"
+          source={require("../../assets/file.svg")}
           alt="File icon"
-          width={16}
-          height={16}
+          style={styles.icon}
         />
-        <Text>Source Code</Text>
+        <Text style={{ color: theme.text }}>Source Code</Text>
       </Anchor>
-      <Anchor
-        className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-        url="https://edosulai.github.io"
-      >
+      <Anchor style={styles.anchor} url="https://edosulai.github.io">
         <Image
           aria-hidden
-          src="/globe.svg"
+          source={require("../../assets/globe.svg")}
           alt="Globe icon"
-          width={16}
-          height={16}
+          style={styles.icon}
         />
-        <Text>Go to edosulai.github.io →</Text>
+        <Text style={{ color: theme.text }}>Go to edosulai.github.io →</Text>
       </Anchor>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 24,
+  },
+  anchor: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  icon: {
+    width: 16,
+    height: 16,
+  },
+});

@@ -1,12 +1,9 @@
 import { MASONRY_BREAKPOINT_COLUMNS_OBJ } from "@/consts";
 import { MasonryProps, MoviePoster } from "@/types";
 import MasonryList from "@react-native-seoul/masonry-list";
-import { motion } from "framer-motion";
 import React from "react";
-import { Text, View } from "react-native";
+import { Text } from "react-native";
 import { MovieCard } from "../molecules";
-
-const MotionView = motion.create(View);
 
 export function Masonry({ list, handleMovieClick }: MasonryProps) {
   return (
@@ -18,13 +15,7 @@ export function Masonry({ list, handleMovieClick }: MasonryProps) {
         renderItem={({ item }) => {
           const movie = item as MoviePoster;
           return (
-            <MotionView
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <MovieCard movie={movie} handleMovieClick={handleMovieClick} />
-            </MotionView>
+            <MovieCard movie={movie} handleMovieClick={handleMovieClick} />
           );
         }}
         contentContainerStyle={{ gap: 8 }}

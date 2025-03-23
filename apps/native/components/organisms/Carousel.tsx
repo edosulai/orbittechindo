@@ -1,18 +1,15 @@
 import { CarouselProps } from "@/types";
-import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
-import { View } from "react-native";
+import { Dimensions } from "react-native";
 import RNCarousel from "react-native-reanimated-carousel";
 import { MovieCard } from "../molecules";
-
-const MotionView = motion.create(View);
 
 export function Carousel({ list, handleMovieClick }: CarouselProps) {
   const [itemsToShow, setItemsToShow] = useState(2);
 
   useEffect(() => {
     const updateItemsToShow = () => {
-      const width = window.innerWidth;
+      const width = Dimensions.get("window").width;
       if (width >= 1200) {
         setItemsToShow(5);
       } else if (width >= 992) {
@@ -25,9 +22,12 @@ export function Carousel({ list, handleMovieClick }: CarouselProps) {
     };
 
     updateItemsToShow();
-    window.addEventListener("resize", updateItemsToShow);
+    const subscription = Dimensions.addEventListener(
+      "change",
+      updateItemsToShow
+    );
 
-    return () => window.removeEventListener("resize", updateItemsToShow);
+    return () => subscription?.remove();
   }, []);
 
   return (
@@ -36,14 +36,7 @@ export function Carousel({ list, handleMovieClick }: CarouselProps) {
       height={400}
       data={list.slice(0, itemsToShow)}
       renderItem={({ item: movie, index }) => (
-        <MotionView
-          key={index}
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          <MovieCard movie={movie} handleMovieClick={handleMovieClick} />
-        </MotionView>
+        <MovieCard movie={movie} handleMovieClick={handleMovieClick} />
       )}
     />
   );

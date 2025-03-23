@@ -1,8 +1,10 @@
-import React from "react";
 import { useAuthStore } from "@/stores";
+import { DarkTheme, LightTheme } from "@/themes";
 import { MovieHeaderProps } from "@/types";
+import { useRouter } from "expo-router";
+import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Image, View } from "react-native";
+import { Image, StyleSheet, useColorScheme, View } from "react-native";
 import { Input, Select } from "../atoms";
 import { Dropdown } from "../molecules";
 
@@ -11,6 +13,7 @@ export function MovieHeader({
   handleTypeFilterChange,
   handleYearRangeChange,
 }: MovieHeaderProps) {
+  const router = useRouter();
   const logout = useAuthStore((state) => state.logout);
   const { control, getValues } = useForm({
     defaultValues: {
@@ -21,10 +24,13 @@ export function MovieHeader({
     },
   });
 
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === "dark" ? DarkTheme : LightTheme;
+
   return (
     <>
-      <View className="mx-auto w-full max-w-6xl p-4 rounded-full border">
-        <View className="flex gap-2 items-center justify-between w-full">
+      <View style={[styles.container, { borderColor: theme.borderColor }]}>
+        <View style={styles.innerContainer}>
           <Controller
             name="typeFilter"
             control={control}
@@ -43,7 +49,7 @@ export function MovieHeader({
               />
             )}
           />
-          <View className="flex space-x-2">
+          <View style={styles.yearContainer}>
             <Controller
               name="startYear"
               control={control}
@@ -108,20 +114,40 @@ export function MovieHeader({
             items={[
               {
                 name: "Logout",
-                onClick: logout,
+                onClick: () => logout(router),
               },
             ]}
-          >
-            <Image
-              src="/vercel.svg"
-              alt="Account"
-              width={24}
-              height={24}
-              className="object-contain"
-            />
-          </Dropdown>
+            text=""
+          />
         </View>
       </View>
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginHorizontal: "auto",
+    width: "100%",
+    maxWidth: 960,
+    padding: 16,
+    borderRadius: 9999,
+    borderWidth: 1,
+  },
+  innerContainer: {
+    flexDirection: "row",
+    gap: 8,
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  yearContainer: {
+    flexDirection: "row",
+    marginRight: 8,
+  },
+  image: {
+    width: 24,
+    height: 24,
+    resizeMode: "contain",
+  },
+});

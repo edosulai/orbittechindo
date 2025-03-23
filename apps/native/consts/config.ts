@@ -1,4 +1,4 @@
-import Constants from 'expo-constants';
+import Constants from "expo-constants";
 
 export const OMDB_API_URL = "http://www.omdbapi.com/";
 export const OMDB_API_KEY = Constants.expoConfig?.extra?.OMDB_API_KEY || "";

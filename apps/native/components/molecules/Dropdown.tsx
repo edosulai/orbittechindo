@@ -1,53 +1,83 @@
-import React from "react";
 import { DropdownProps } from "@/types";
-import { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import { useTheme } from "styled-components/native";
 import { Button } from "../atoms";
 
-export function Dropdown({ items, children }: DropdownProps) {
+export function Dropdown({ items, text }: DropdownProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<View>(null);
+  const theme = useTheme();
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      dropdownRef.current &&
-      !dropdownRef.current.contains(event.target as Node)
-    ) {
-      setDropdownOpen(false);
-    }
+  const handleClickOutside = () => {
+    setDropdownOpen(false);
   };
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   return (
-    <div className="relative" ref={dropdownRef}>
-      <Button
-        className="transition-transform transform hover:scale-105"
-        onPress={toggleDropdown}
-      >
-        {children}
-      </Button>
-      {dropdownOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50">
-          {items.map((item, index) => (
-            <button
-              key={index}
-              className="block w-full text-left px-4 py-2 text-sm text-gray-700 cursor-pointer"
-              onClick={item.onClick}
-            >
-              {item.name}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
+    <TouchableWithoutFeedback onPress={handleClickOutside}>
+      <View style={styles.relative} ref={dropdownRef}>
+        <Button text={text} style={styles.button} onPress={toggleDropdown} />
+        {dropdownOpen && (
+          <View
+            style={[
+              styles.dropdown,
+              { backgroundColor: theme.colors.background },
+            ]}
+          >
+            {items.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.item}
+                onPress={item.onClick}
+              >
+                <Text style={[styles.itemText, { color: theme.colors.text }]}>
+                  {item.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
+
+const styles = StyleSheet.create({
+  relative: {
+    position: "relative",
+  },
+  button: {
+    transform: [{ scale: 1.05 }],
+  },
+  dropdown: {
+    position: "absolute",
+    right: 0,
+    marginTop: 8,
+    width: 192,
+    borderWidth: 1,
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    zIndex: 50,
+  },
+  item: {
+    width: "100%",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+  },
+  itemText: {
+    fontSize: 14,
+  },
+});

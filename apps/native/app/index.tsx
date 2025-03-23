@@ -1,4 +1,3 @@
-import React from "react"; 
 import { Carousel, Footer, Masonry, MovieHeader } from "@/components";
 import { useProtectedRoute } from "@/hooks";
 import { MovieFormData, movieSchema } from "@/schemas";
@@ -9,9 +8,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import debounce from "lodash.debounce";
-import { useEffect, useRef, useState } from "react"; // Add this line
+import React, { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { Text, View } from "react-native";
+import {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native"; // Add StyleSheet and ScrollView
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -68,39 +74,31 @@ export default function HomeScreen() {
     }
   }, [data]);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      },
-      {
-        threshold: 1,
-      }
-    );
-    if (loadMoreRef.current) observer.observe(loadMoreRef.current);
-    return () => observer.disconnect();
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    if (
+      isCloseToBottom(event.nativeEvent) &&
+      hasNextPage &&
+      !isFetchingNextPage
+    ) {
+      fetchNextPage();
+    }
+  };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + window.scrollY >=
-          document.body.offsetHeight - 10 &&
-        hasNextPage &&
-        !isFetchingNextPage
-      ) {
-        fetchNextPage();
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+  const isCloseToBottom = ({
+    layoutMeasurement,
+    contentOffset,
+    contentSize,
+  }: NativeScrollEvent) => {
+    const paddingToBottom = 20;
+    return (
+      layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - paddingToBottom
+    );
+  };
 
   const { isAuthenticated, authIsLoading, logout } = useProtectedRoute();
   if (!authIsLoading && !isAuthenticated) {
-    logout();
+    logout(router);
   }
 
   const handleTitleChange = debounce((value: string) => {
@@ -120,7 +118,11 @@ export default function HomeScreen() {
   };
 
   return (
-    <View className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-4 sm:p-8 md:p-12 lg:p-16 xl:p-20 gap-8 sm:gap-16">
+    <ScrollView
+      contentContainerStyle={styles.container}
+      onScroll={handleScroll}
+      scrollEventThrottle={400}
+    >
       <FormProvider {...methods}>
         <MovieHeader
           handleTitleChange={handleTitleChange}
@@ -128,7 +130,7 @@ export default function HomeScreen() {
           handleYearRangeChange={handleYearRangeChange}
         />
       </FormProvider>
-      <View className="flex flex-col gap-8 sm:gap-16 row-start-2 items-center justify-center">
+      <View style={styles.content}>
         <Carousel
           list={movies.slice(0, 5)}
           handleMovieClick={handleMovieClick}
@@ -137,9 +139,28 @@ export default function HomeScreen() {
 
         {isLoading && <Text>Loading...</Text>}
         {error && <Text>{error.message}</Text>}
-        {hasNextPage && <View ref={loadMoreRef} className="h-14" />}
+        {hasNextPage && <View ref={loadMoreRef} style={styles.loadMore} />}
       </View>
       {!hasNextPage && <Footer />}
-    </View>
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 16,
+    gap: 16,
+  },
+  content: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 16,
+  },
+  loadMore: {
+    height: 56,
+  },
+});

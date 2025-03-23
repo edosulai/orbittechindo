@@ -3,16 +3,17 @@ import { LoginFormData, loginSchema } from "@/schemas";
 import { useAuthStore } from "@/stores";
 import { generateToken } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { router } from "expo-router";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { Text, View } from "react-native";
+import { Controller, useForm } from "react-hook-form";
+import { StyleSheet, Text, View } from "react-native";
 import { Button, Input } from "../atoms";
 
 export function LoginForm() {
   const {
-    register,
-    handleSubmit,
+    control,
     formState: { errors },
+    handleSubmit,
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
@@ -27,7 +28,7 @@ export function LoginForm() {
         data.password === MOCK_USER.password
       ) {
         const token = await generateToken(data.email);
-        login(token);
+        login(token, router);
       } else {
         alert("Invalid email or password");
       }
@@ -39,30 +40,59 @@ export function LoginForm() {
   };
 
   return (
-    <View className="flex flex-col gap-4">
-      <Input
-        placeholder="Username"
-        value={MOCK_USER.email}
-        {...register("email")}
+    <View style={styles.container}>
+      <Controller
+        control={control}
+        name="email"
+        defaultValue={MOCK_USER.email}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <Input
+            placeholder="Username"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+          />
+        )}
       />
       {errors.email && (
-        <Text className="text-red-500">{errors.email.message}</Text>
+        <Text style={styles.errorText}>{errors.email.message}</Text>
       )}
-      <Input
-        placeholder="Password"
-        value={MOCK_USER.password}
-        {...register("password")}
+      <Controller
+        control={control}
+        name="password"
+        defaultValue={MOCK_USER.password}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <Input
+            placeholder="Password"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+          />
+        )}
       />
       {errors.password && (
-        <Text className="text-red-500">{errors.password.message}</Text>
+        <Text style={styles.errorText}>{errors.password.message}</Text>
       )}
       <Button
         isLoading={isLoading}
-        className="transition-transform transform hover:scale-105"
+        style={styles.button}
+        text="Login"
         onPress={handleSubmit(onSubmit)}
-      >
-        <Text>Login</Text>
-      </Button>
+      />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    gap: 16,
+  },
+  errorText: {
+    color: "red",
+  },
+  button: {
+    transform: "scale(1.05)",
+  },
+});

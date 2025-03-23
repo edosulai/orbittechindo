@@ -1,44 +1,95 @@
 import { useValidImage } from "@/hooks";
+import { DarkTheme, LightTheme } from "@/themes";
 import { MovieCardProps } from "@/types";
-import { motion } from "framer-motion";
 import React from "react";
-import { Image, Text, View } from "react-native";
-
-const MotionView = motion.create(View);
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  useColorScheme,
+  View,
+} from "react-native";
 
 export function MovieCard({ movie, handleMovieClick }: MovieCardProps) {
   const isValidImage = useValidImage(movie.Poster);
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === "dark" ? DarkTheme : LightTheme;
 
   return (
-    <MotionView
-      className="flex flex-col items-center rounded-lg shadow-md p-2"
-      onTap={() => handleMovieClick(movie.imdbID)}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+    <TouchableOpacity
+      style={[styles.card, { backgroundColor: theme.background }]}
+      onPress={() => handleMovieClick(movie.imdbID)}
     >
-      <View className="flex flex-col justify-center items-center relative cursor-pointer">
+      <View style={styles.imageContainer}>
         {isValidImage ? (
-          <Image
-            src={movie.Poster}
-            alt={movie.Title}
-            width={200}
-            height={300}
-            className="rounded-md"
-          />
+          <Image source={{ uri: movie.Poster }} style={styles.image} />
         ) : (
-          <View className="w-[200px] h-[300px] flex items-center justify-center bg-gray-200 rounded-md">
-            <Text className="text-gray-900">Image Not Available</Text>
+          <View style={styles.imagePlaceholder}>
+            <Text style={[styles.imagePlaceholderText, { color: theme.text }]}>
+              Image Not Available
+            </Text>
           </View>
         )}
-        <View className="absolute min-h-14 bottom-0 bg-gradient-to-t from-gray-900 dark:from-gray-800 to-transparent w-full rounded-b-lg p-2">
-          <Text className="mt-2 text-sm font-semibold text-gray-900 dark:text-gray-100">
+        <View style={styles.textContainer}>
+          <Text style={[styles.title, { color: theme.text }]}>
             {movie.Title}
           </Text>
-          <Text className="text-xs text-gray-600 dark:text-gray-400">
-            {movie.Year}
-          </Text>
+          <Text style={[styles.year, { color: theme.text }]}>{movie.Year}</Text>
         </View>
       </View>
-    </MotionView>
+    </TouchableOpacity>
   );
 }
+
+const styles = StyleSheet.create({
+  card: {
+    flexDirection: "column",
+    alignItems: "center",
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
+    padding: 8,
+  },
+  imageContainer: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+  },
+  image: {
+    width: 200,
+    height: 300,
+    borderRadius: 8,
+  },
+  imagePlaceholder: {
+    width: 200,
+    height: 300,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ccc",
+    borderRadius: 8,
+  },
+  imagePlaceholderText: {
+    fontSize: 16,
+  },
+  textContainer: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    padding: 8,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  year: {
+    fontSize: 12,
+  },
+});
