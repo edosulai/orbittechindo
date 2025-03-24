@@ -17,8 +17,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true,
-      "usesNonExemptEncryption": false
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
@@ -40,10 +39,6 @@
           "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
         }
       ]
-    ],
-    "extra": {
-      "OMDB_API_KEY": "733acc89",
-      "JWT_KEY": "secret"
-    }
+    ]
   }
 }

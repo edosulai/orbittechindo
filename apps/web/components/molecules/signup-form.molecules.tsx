@@ -3,13 +3,13 @@
 import { SignupFormData, signupSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { Button, Input } from "../atoms";
 
 export function SignupForm() {
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<SignupFormData>({
@@ -34,16 +34,68 @@ export function SignupForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <Input type="text" placeholder="Username" {...register("name")} />
+      <Controller
+        control={control}
+        name="name"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <Input
+            type="text"
+            placeholder="Username"
+            onBlur={onBlur}
+            onChange={onChange}
+            value={value}
+          />
+        )}
+      />
       {errors.name && <p className="text-red-500">{errors.name.message}</p>}
-      <Input type="email" placeholder="Email" {...register("email")} />
+
+      <Controller
+        control={control}
+        name="email"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <Input
+            type="email"
+            placeholder="Email"
+            onBlur={onBlur}
+            onChange={onChange}
+            value={value}
+          />
+        )}
+      />
       {errors.email && <p className="text-red-500">{errors.email.message}</p>}
-      <Input type="password" placeholder="Password" {...register("password")} />
+
+      <Controller
+        control={control}
+        name="password"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <Input
+            type="password"
+            placeholder="Password"
+            onBlur={onBlur}
+            onChange={onChange}
+            value={value}
+          />
+        )}
+      />
       {errors.password && (
         <p className="text-red-500">{errors.password.message}</p>
       )}
-      <Input type="text" placeholder="Phone Number" {...register("phone")} />
+
+      <Controller
+        control={control}
+        name="phone"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <Input
+            type="text"
+            placeholder="Phone Number"
+            onBlur={onBlur}
+            onChange={onChange}
+            value={value}
+          />
+        )}
+      />
       {errors.phone && <p className="text-red-500">{errors.phone.message}</p>}
+
       <Button
         type="submit"
         isLoading={isLoading}

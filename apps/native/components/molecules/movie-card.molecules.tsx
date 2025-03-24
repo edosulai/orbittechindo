@@ -2,7 +2,14 @@ import { useValidImage } from "@/hooks";
 import { MovieCardProps } from "@/types";
 import { MotiView } from "moti";
 import React, { useState } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import tw from "twrnc";
 
 export function MovieCard({
@@ -37,13 +44,17 @@ export function MovieCard({
               style,
             ])}
             onLoad={(event) => {
-              const { width, height } = event.nativeEvent.source;
-              setImageSize({ width, height });
+              if (Platform.OS !== "web") {
+                const { width, height } = event.nativeEvent.source;
+                setImageSize({ width, height });
+              }
             }}
           />
         ) : (
           <View style={[tw`bg-gray-200 items-center justify-center`, style]}>
-            <Text style={tw`text-gray-900`}>Image Not Available</Text>
+            <Text style={tw`text-gray-900 text-center`}>
+              Image Not Available
+            </Text>
           </View>
         )}
 
