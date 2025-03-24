@@ -40,13 +40,14 @@ export function LoginForm() {
   };
 
   return (
-    <View style={tw`flex flex-col gap-4`}>
+    <View style={tw`gap-4`}>
       <Controller
         control={control}
         name="email"
         defaultValue={MOCK_USER.email}
         render={({ field: { onChange, onBlur, value } }) => (
           <Input
+            style={tw`w-[250px]`}
             placeholder="Username"
             onBlur={onBlur}
             onChangeText={onChange}
@@ -63,6 +64,7 @@ export function LoginForm() {
         defaultValue={MOCK_USER.password}
         render={({ field: { onChange, onBlur, value } }) => (
           <Input
+            style={tw`w-[250px]`}
             placeholder="Password"
             onBlur={onBlur}
             onChangeText={onChange}
@@ -75,7 +77,7 @@ export function LoginForm() {
       )}
       <Button
         isLoading={isLoading}
-        style={tw`transition-transform transform hover:scale-105`}
+        style={tw`transition-transform transform hover:scale-105 w-[250px]`}
         onPress={handleSubmit(onSubmit)}
       >
         <Text style={tw`text-white`}>Login</Text>

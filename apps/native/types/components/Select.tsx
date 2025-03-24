@@ -1,6 +1,3 @@
-import { ViewProps } from "react-native";
-import { PickerSelectProps } from "react-native-picker-select";
+import { PickerProps } from "@react-native-picker/picker";
 
-type CombinedProps = ViewProps & Omit<PickerSelectProps, "style">;
-
-export type SelectProps = CombinedProps;
+export type SelectProps = PickerProps;

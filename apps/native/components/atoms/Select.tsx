@@ -1,14 +1,7 @@
 import { SelectProps } from "@/types";
+import { Picker } from "@react-native-picker/picker";
 import React from "react";
-import { StyleSheet } from "react-native";
-import RNPickerSelect, { PickerStyle } from "react-native-picker-select";
-import tw from "twrnc";
 
-export function Select({ style, ...props }: SelectProps) {
-  const combinedStyle = StyleSheet.flatten([
-    tw`rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full`,
-    style,
-  ]);
-
-  return <RNPickerSelect style={combinedStyle as PickerStyle} {...props} />;
+export function Select({ ...props }: SelectProps) {
+  return <Picker {...props} />;
 }

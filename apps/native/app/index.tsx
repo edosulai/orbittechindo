@@ -1,22 +1,25 @@
-import { Carousel, Footer, Masonry, MovieHeader } from "@/components";
+import { Footer, LoadingSpinner, MovieCard, MovieHeader } from "@/components";
 import { useProtectedRoute } from "@/hooks";
 import { MovieFormData, movieSchema } from "@/schemas";
 import { fetchMovieQuery } from "@/services";
 import { useMovieStore } from "@/stores";
 import { MoviePoster } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import MasonryList from "@react-native-seoul/masonry-list";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { router } from "expo-router";
 import debounce from "lodash.debounce";
+import { MotiView } from "moti";
 import React, { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import {
+  Dimensions,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  ScrollView,
   Text,
   View,
 } from "react-native";
+import RNCarousel from "react-native-reanimated-carousel";
 import tw from "twrnc";
 
 export default function HomeScreen() {
@@ -88,7 +91,7 @@ export default function HomeScreen() {
     contentOffset,
     contentSize,
   }: NativeScrollEvent) => {
-    const paddingToBottom = 20;
+    const paddingToBottom = 50;
     return (
       layoutMeasurement.height + contentOffset.y >=
       contentSize.height - paddingToBottom
@@ -117,11 +120,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={tw`grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-4 sm:p-8 md:p-12 lg:p-16 xl:p-20 gap-8 sm:gap-16`}
-      onScroll={handleScroll}
-      scrollEventThrottle={400}
-    >
+    <View style={tw`flex-1 bg-gray-100`}>
       <FormProvider {...methods}>
         <MovieHeader
           handleTitleChange={handleTitleChange}
@@ -129,20 +128,72 @@ export default function HomeScreen() {
           handleYearRangeChange={handleYearRangeChange}
         />
       </FormProvider>
-      <View
-        style={tw`flex flex-col gap-8 sm:gap-16 row-start-2 items-center justify-center`}
-      >
-        <Carousel
-          list={movies.slice(0, 5)}
-          handleMovieClick={handleMovieClick}
-        />
-        <Masonry list={movies} handleMovieClick={handleMovieClick} />
 
-        {isLoading && <Text>Loading...</Text>}
-        {error && <Text>{error.message}</Text>}
-        {hasNextPage && <View ref={loadMoreRef} style={tw`h-14`} />}
-      </View>
-      {!hasNextPage && <Footer />}
-    </ScrollView>
+      <RNCarousel
+        loop
+        width={Dimensions.get("window").width}
+        height={300}
+        data={movies.slice(0, 5)}
+        scrollAnimationDuration={1000}
+        mode="parallax"
+        containerStyle={tw`w-full items-center`}
+        modeConfig={{
+          parallaxScrollingScale: 0.9,
+          parallaxScrollingOffset: 270,
+          parallaxAdjacentItemScale: 0.8,
+        }}
+        renderItem={({ item: movie, index }) => {
+          return (
+            <MotiView
+              style={tw`flex-1 items-center`}
+              from={{ opacity: 0, translateY: 50 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <MovieCard
+                movie={movie}
+                handleMovieClick={handleMovieClick}
+                style={tw`w-[200px] h-[300px]`}
+              />
+            </MotiView>
+          );
+        }}
+      />
+
+      <MasonryList
+        data={movies}
+        keyExtractor={(item, index) => index.toString()}
+        numColumns={2}
+        style={tw`items-center justify-center gap-4`}
+        contentContainerStyle={tw``}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        renderItem={({ item }) => {
+          return (
+            <MotiView
+              from={{ opacity: 0, translateY: 50 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <MovieCard
+                movie={item as MoviePoster}
+                handleMovieClick={handleMovieClick}
+                style={tw`w-full mb-4`}
+              />
+            </MotiView>
+          );
+        }}
+      />
+
+      {isLoading && <LoadingSpinner />}
+      {error && <Text>{error.message}</Text>}
+      {hasNextPage ? (
+        <View ref={loadMoreRef} />
+      ) : (
+        <Footer style={tw`mt-16`} />
+      )}
+    </View>
   );
 }
+
+// export { default } from './demo';

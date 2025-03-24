@@ -1,12 +1,12 @@
 export * from "./Anchor";
+export * from "./AppTheme";
 export * from "./Button";
-export * from "./Carousel";
 export * from "./Charts";
 export * from "./Dropdown";
+export * from "./Footer";
 export * from "./Input";
 export * from "./Label";
-export * from "./Masonry";
 export * from "./MovieCard";
 export * from "./MovieHeader";
 export * from "./Select";
-export * from "./AppTheme";
+

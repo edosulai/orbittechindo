@@ -6,7 +6,7 @@ import tw from "twrnc";
 export function LoadingSpinner() {
   return (
     <MotiView
-      style={tw`fixed inset-0 flex justify-center items-center bg-background z-50`}
+      style={tw`inset-0 justify-center items-center bg-background z-50`}
       animate={{ rotate: "360deg" }}
       transition={{ repeat: Infinity, duration: 1, type: "timing" }}
     >

@@ -2,53 +2,60 @@ import { useValidImage } from "@/hooks";
 import { MovieCardProps } from "@/types";
 import { MotiView } from "moti";
 import React, { useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import tw from "twrnc";
 
-export function MovieCard({ movie, handleMovieClick }: MovieCardProps) {
+export function MovieCard({
+  movie,
+  handleMovieClick,
+  style,
+  ...props
+}: MovieCardProps) {
   const isValidImage = useValidImage(movie.Poster);
   const [isPressed, setIsPressed] = useState(false);
+  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
 
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={() => handleMovieClick(movie.imdbID)}
-      onPressIn={() => setIsPressed(true)}
-      onPressOut={() => setIsPressed(false)}
+      onHoverIn={() => setIsPressed(true)}
+      onHoverOut={() => setIsPressed(false)}
+      style={StyleSheet.flatten([
+        tw`rounded-lg overflow-hidden`,
+        { width: imageSize.width, height: imageSize.height },
+        style,
+      ])}
     >
-      <MotiView
-        style={tw`flex flex-col items-center rounded-lg shadow-md p-2 cursor-pointer`}
-        animate={{ scale: isPressed ? 0.95 : 1 }}
-      >
-        <View style={tw`flex flex-col justify-center items-center relative`}>
-          {isValidImage ? (
-            <Image
-              src={movie.Poster}
-              alt={movie.Title}
-              width={200}
-              height={300}
-              style={tw`rounded-md`}
-            />
-          ) : (
-            <View
-              style={tw`w-[200px] h-[300px] flex items-center justify-center bg-gray-200 rounded-md`}
-            >
-              <Text style={tw`text-gray-900`}>Image Not Available</Text>
-            </View>
-          )}
-          <View
-            style={tw`absolute min-h-14 bottom-0 bg-gradient-to-t from-gray-900 dark:from-gray-800 to-transparent w-full rounded-b-lg p-2`}
-          >
-            <Text
-              style={tw`mt-2 text-sm font-semibold text-gray-900 dark:text-gray-100`}
-            >
-              {movie.Title}
-            </Text>
-            <Text style={tw`text-xs text-gray-600 dark:text-gray-400`}>
-              {movie.Year}
-            </Text>
+      <MotiView animate={{ scale: isPressed ? 0.95 : 1 }}>
+        {isValidImage ? (
+          <Image
+            source={{ uri: movie.Poster }}
+            alt={movie.Title}
+            {...props}
+            style={StyleSheet.flatten([
+              { width: imageSize.width, height: imageSize.height },
+              style,
+            ])}
+            onLoad={(event) => {
+              const { width, height } = event.nativeEvent.source;
+              setImageSize({ width, height });
+            }}
+          />
+        ) : (
+          <View style={[tw`bg-gray-200 items-center justify-center`, style]}>
+            <Text style={tw`text-gray-900`}>Image Not Available</Text>
           </View>
+        )}
+
+        <View
+          style={tw`absolute bottom-0 left-0 right-0 bg-black/60 p-4 rounded-b-lg pb-8`}
+        >
+          <Text style={tw`text-white text-lg font-semibold`}>
+            {movie.Title}
+          </Text>
+          <Text style={tw`text-gray-300 text-sm`}>{movie.Year}</Text>
         </View>
       </MotiView>
-    </TouchableOpacity>
+    </Pressable>
   );
 }

@@ -32,12 +32,13 @@ export function SignupForm() {
   };
 
   return (
-    <View style={tw`flex flex-col gap-4`}>
+    <View style={tw`gap-4`}>
       <Controller
         control={control}
         name="name"
         render={({ field: { onChange, onBlur, value } }) => (
           <Input
+            style={tw`w-[250px]`}
             placeholder="Username"
             onBlur={onBlur}
             onChangeText={onChange}
@@ -54,6 +55,7 @@ export function SignupForm() {
         name="email"
         render={({ field: { onChange, onBlur, value } }) => (
           <Input
+            style={tw`w-[250px]`}
             placeholder="Email"
             keyboardType="email-address"
             autoCapitalize="none"
@@ -72,6 +74,7 @@ export function SignupForm() {
         name="password"
         render={({ field: { onChange, onBlur, value } }) => (
           <Input
+            style={tw`w-[250px]`}
             placeholder="Password"
             secureTextEntry={true}
             onBlur={onBlur}
@@ -89,6 +92,7 @@ export function SignupForm() {
         name="phone"
         render={({ field: { onChange, onBlur, value } }) => (
           <Input
+            style={tw`w-[250px]`}
             placeholder="Phone Number"
             onBlur={onBlur}
             onChangeText={onChange}
@@ -103,9 +107,9 @@ export function SignupForm() {
       <Button
         onPress={handleSubmit(onSubmit)}
         isLoading={isLoading}
-        style={tw`transition-transform transform hover:scale-105`}
+        style={tw`transition-transform transform hover:scale-105 w-[250px]`}
       >
-        <Text style={tw`text-white`}>Login</Text>
+        <Text style={tw`text-white`}>Sign Up</Text>
       </Button>
     </View>
   );

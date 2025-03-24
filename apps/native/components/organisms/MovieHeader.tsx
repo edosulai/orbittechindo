@@ -1,18 +1,20 @@
 import { useAuthStore } from "@/stores";
 import { MovieHeaderProps } from "@/types";
-import { Image } from "moti";
-import React from "react";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
-import { Input, Select } from "../atoms";
-import { Dropdown } from "../molecules";
+import { Button, Input, Select } from "../atoms";
+import Modal from "react-native-modal";
+import { Picker } from "@react-native-picker/picker";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export function MovieHeader({
   handleTitleChange,
   handleTypeFilterChange,
   handleYearRangeChange,
 }: MovieHeaderProps) {
+  const [isFilterVisible, setFilterVisible] = useState(false);
   const logout = useAuthStore((state) => state.logout);
   const { control, getValues } = useForm({
     defaultValues: {
@@ -24,76 +26,14 @@ export function MovieHeader({
   });
 
   return (
-    <View style={tw`mx-auto w-full max-w-6xl p-4 rounded-full border`}>
-      <View style={tw`flex gap-2 items-center justify-between w-full`}>
-        <Controller
-          name="typeFilter"
-          control={control}
-          render={({ field }) => (
-            <Select
-              value={field.value}
-              onValueChange={(value) => {
-                field.onChange(value);
-                handleTypeFilterChange(value);
-              }}
-              items={[
-                { label: "All", value: "" },
-                { label: "Movie", value: "movie" },
-                { label: "Series", value: "series" },
-              ]}
-            />
-          )}
-        />
-        <View style={tw`flex space-x-2`}>
-          <Controller
-            name="startYear"
-            control={control}
-            render={({ field }) => (
-              <Select
-                value={field.value}
-                onValueChange={(date) => {
-                  field.onChange(date);
-                  const { endYear } = getValues();
-                  handleYearRangeChange([date ? date : 1900, endYear]);
-                }}
-                items={[...Array(new Date().getFullYear() - 1900 + 1)].map(
-                  (_, i) => ({
-                    label: (1900 + i).toString(),
-                    value: 1900 + i,
-                  })
-                )}
-              />
-            )}
-          />
-          <Controller
-            name="endYear"
-            control={control}
-            render={({ field }) => (
-              <Select
-                value={field.value}
-                onValueChange={(date) => {
-                  field.onChange(date);
-                  const { startYear } = getValues();
-                  handleYearRangeChange([
-                    startYear,
-                    date ? date : new Date().getFullYear(),
-                  ]);
-                }}
-                items={[...Array(new Date().getFullYear() - 1900 + 1)].map(
-                  (_, i) => ({
-                    label: (1900 + i).toString(),
-                    value: 1900 + i,
-                  })
-                )}
-              />
-            )}
-          />
-        </View>
+    <View style={tw`p-4 bg-white shadow-md pt-20`}>
+      <View style={tw`flex-row items-center`}>
         <Controller
           name="title"
           control={control}
           render={({ field }) => (
             <Input
+              style={tw`flex-1 border p-2 rounded-lg bg-gray-100`}
               placeholder="Search by title"
               onBlur={field.onBlur}
               onChangeText={(date) => {
@@ -105,23 +45,113 @@ export function MovieHeader({
             />
           )}
         />
-        <Dropdown
-          items={[
-            {
-              name: "Logout",
-              onClick: () => logout(),
-            },
-          ]}
+        <TouchableOpacity
+          onPress={() => setFilterVisible(true)}
+          style={tw`ml-2 p-2`}
         >
-          <Image
-            src="/vercel.svg"
-            alt="Account"
-            width={24}
-            height={24}
-            style={tw`object-contain`}
-          />
-        </Dropdown>
+          <MaterialIcons name="menu" size={24} color="black" />
+        </TouchableOpacity>
       </View>
+
+      <Modal
+        isVisible={isFilterVisible}
+        onBackdropPress={() => setFilterVisible(false)}
+      >
+        <View style={tw`bg-white p-4 rounded-lg`}>
+          <Text style={tw`text-lg font-bold mb-2`}>Type</Text>
+          <Controller
+            name="typeFilter"
+            control={control}
+            render={({ field }) => (
+              <Select
+                selectedValue={field.value}
+                onValueChange={(itemValue) => {
+                  field.onChange(itemValue);
+                  handleTypeFilterChange(itemValue.toString());
+                  setFilterVisible(false)
+                }}
+                style={tw`border p-2 rounded-lg mb-4`}
+              >
+                <Picker.Item label="All" value="" />
+                <Picker.Item label="Movie" value="movie" />
+                <Picker.Item label="Series" value="series" />
+              </Select>
+            )}
+          />
+
+          <View style={tw`flex-row justify-between`}>
+            <View style={tw`flex-1`}>
+              <Text style={tw`text-lg font-bold mb-2`}>Start Year</Text>
+              <Controller
+                name="startYear"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    selectedValue={field.value}
+                    onValueChange={(itemValue) => {
+                      field.onChange(itemValue);
+                      const { endYear } = getValues();
+                      handleYearRangeChange([
+                        itemValue ? Number(itemValue) : 1900,
+                        endYear,
+                      ]);
+                      setFilterVisible(false)
+                    }}
+                    style={tw`border p-2 rounded-lg mb-4`}
+                  >
+                    {generateYears(1900, new Date().getFullYear()).map((yr) => (
+                      <Picker.Item key={yr} label={yr.toString()} value={yr} />
+                    ))}
+                  </Select>
+                )}
+              />
+            </View>
+            <View style={tw`flex-1`}>
+              <Text style={tw`text-lg font-bold mb-2`}>End Year</Text>
+              <Controller
+                name="endYear"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    selectedValue={field.value}
+                    onValueChange={(itemValue) => {
+                      field.onChange(itemValue);
+                      const { startYear } = getValues();
+                      handleYearRangeChange([
+                        startYear,
+                        itemValue
+                          ? Number(itemValue)
+                          : new Date().getFullYear(),
+                      ]);
+                      setFilterVisible(false)
+                    }}
+                    style={tw`border p-2 rounded-lg mb-4`}
+                  >
+                    {generateYears(1900, new Date().getFullYear()).map((yr) => (
+                      <Picker.Item key={yr} label={yr.toString()} value={yr} />
+                    ))}
+                  </Select>
+                )}
+              />
+            </View>
+          </View>
+
+          <Button
+            onPress={logout}
+            style={tw`ml-auto bg-red-800`}
+          >
+            <Text style={tw`text-center text-white`}>Logout</Text>
+          </Button>
+        </View>
+      </Modal>
     </View>
   );
 }
+
+const generateYears = (start: number, end: number) => {
+  let years = [];
+  for (let i = end; i >= start; i--) {
+    years.push(i);
+  }
+  return years;
+};
