@@ -68,7 +68,7 @@ export function MovieHeader({
                 onValueChange={(itemValue) => {
                   field.onChange(itemValue);
                   handleTypeFilterChange(itemValue.toString());
-                  setFilterVisible(false)
+                  setFilterVisible(false);
                 }}
                 style={tw`border p-2 rounded-lg mb-4`}
               >
@@ -95,7 +95,7 @@ export function MovieHeader({
                         itemValue ? Number(itemValue) : 1900,
                         endYear,
                       ]);
-                      setFilterVisible(false)
+                      setFilterVisible(false);
                     }}
                     style={tw`border p-2 rounded-lg mb-4`}
                   >
@@ -123,7 +123,7 @@ export function MovieHeader({
                           ? Number(itemValue)
                           : new Date().getFullYear(),
                       ]);
-                      setFilterVisible(false)
+                      setFilterVisible(false);
                     }}
                     style={tw`border p-2 rounded-lg mb-4`}
                   >
@@ -136,10 +136,7 @@ export function MovieHeader({
             </View>
           </View>
 
-          <Button
-            onPress={logout}
-            style={tw`ml-auto bg-red-800`}
-          >
+          <Button onPress={logout} style={tw`ml-auto bg-red-800`}>
             <Text style={tw`text-center text-white`}>Logout</Text>
           </Button>
         </View>

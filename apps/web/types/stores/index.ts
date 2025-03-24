@@ -1,2 +1,2 @@
-export * from "./Auth";
-export * from "./Movie";
+export * from "./auth.types";
+export * from "./movie.types";

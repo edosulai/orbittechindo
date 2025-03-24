@@ -1,4 +1,4 @@
-import { OMDB_API_KEY, OMDB_API_URL } from "@/consts";
+import { OMDB_API_KEY, OMDB_API_URL } from "@/consts/index.consts";
 import { MovieData, MovieList, MovieRequest } from "@/types";
 import axios from "axios";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { MASONRY_BREAKPOINT_COLUMNS_OBJ } from "@/consts";
+import { MASONRY_BREAKPOINT_COLUMNS_OBJ } from "@/consts/index.consts";
 import { MasonryProps } from "@/types";
 import { motion } from "framer-motion";
 import ReactMasonry from "react-masonry-css";

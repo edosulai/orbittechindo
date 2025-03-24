@@ -1,4 +1,4 @@
-import { FIREBASE_CONFIG } from "@/consts";
+import { FIREBASE_CONFIG } from "@/consts/index.consts";
 import { getApp, getApps, initializeApp } from "firebase/app";
 import { getMessaging, getToken, isSupported } from "firebase/messaging";
 

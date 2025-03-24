@@ -64,9 +64,7 @@ export default function MovieDetailPage() {
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={tw`bg-gray-100 items-stretch p-4 pt-20`}
-    >
+    <ScrollView contentContainerStyle={tw`bg-gray-100 items-stretch p-4 pt-20`}>
       <View style={tw`gap-6`}>
         <Button
           onPress={handleBackClick}

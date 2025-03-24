@@ -5,7 +5,9 @@ const isWeb = Platform.OS === "web";
 
 export const Storage = {
   async getItem(key: string): Promise<string | null> {
-    return isWeb ? localStorage.getItem(key) : await SecureStore.getItemAsync(key);
+    return isWeb
+      ? localStorage.getItem(key)
+      : await SecureStore.getItemAsync(key);
   },
 
   async setItem(key: string, value: string): Promise<void> {

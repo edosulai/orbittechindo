@@ -1,4 +1,4 @@
-import { JWT_KEY } from "@/consts";
+import { JWT_KEY } from "@/consts/index.consts";
 import { SignJWT, jwtVerify } from "jose";
 
 export async function generateToken(email: string): Promise<string> {

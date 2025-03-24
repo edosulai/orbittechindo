@@ -2,7 +2,7 @@
 const { getDefaultConfig } = require("expo/metro-config");
 const {
   wrapWithReanimatedMetroConfig,
-} = require('react-native-reanimated/metro-config');
+} = require("react-native-reanimated/metro-config");
 const path = require("path");
 
 // Find the workspace root, this can be replaced with `find-yarn-workspace-root`

@@ -1,2 +1,2 @@
-export * from "./Footer";
-export * from "./MovieHeader";
+export * from "./footer.organisms";
+export * from "./movie-header.organisms";

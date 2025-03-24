@@ -1,11 +1,4 @@
 {
-  "tailwindCSS.classAttributes": [
-    "class",
-    "className",
-    "style",
-    ".*Style",
-  ],
-  "tailwindCSS.experimental.classRegex": [
-    "tw`([^`]*)`",
-  ]
+  "tailwindCSS.classAttributes": ["class", "className", "style", ".*Style"],
+  "tailwindCSS.experimental.classRegex": ["tw`([^`]*)`"]
 }

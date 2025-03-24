@@ -6,7 +6,7 @@ import { create } from "zustand";
 export const useAuthStore = create<AuthStore>((set) => ({
   isAuthenticated: false,
   isLoading: true,
-  tractAuth:  async() => {
+  tractAuth: async () => {
     let isAuthenticated = false;
 
     const token = await Storage.getItem("token");

@@ -52,7 +52,7 @@ export default function HomeScreen() {
       const result = await fetchMovieQuery(
         title || "all",
         typeFilter || "",
-        pageParam
+        pageParam,
       );
       if (result.Response === "False") {
         throw new Error(result.Error);
@@ -187,11 +187,7 @@ export default function HomeScreen() {
 
       {isLoading && <LoadingSpinner />}
       {error && <Text>{error.message}</Text>}
-      {hasNextPage ? (
-        <View ref={loadMoreRef} />
-      ) : (
-        <Footer style={tw`mt-16`} />
-      )}
+      {hasNextPage ? <View ref={loadMoreRef} /> : <Footer style={tw`mt-16`} />}
     </View>
   );
 }

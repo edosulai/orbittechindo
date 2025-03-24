@@ -1,6 +1,6 @@
 "use client";
 
-import { MOCK_USER } from "@/consts";
+import { MOCK_USER } from "@/consts/index.consts";
 import { LoginFormData, loginSchema } from "@/schemas";
 import { useAuthStore } from "@/stores";
 import { generateToken } from "@/utils";
