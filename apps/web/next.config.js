@@ -1,6 +1,4 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+module.exports = {
   reactStrictMode: true,
   images: {
     domains: ["m.media-amazon.com"],
@@ -21,5 +19,3 @@ const nextConfig: NextConfig = {
     return config;
   },
 };
-
-export default nextConfig;
