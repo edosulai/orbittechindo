@@ -2,6 +2,7 @@
 
 import { Footer, LoginForm } from "@/components";
 import { useProtectedRoute } from "@/hooks";
+import Link from "next/link";
 
 function LoginPage() {
   const { isAuthenticated, authIsLoading } = useProtectedRoute();
@@ -15,6 +16,7 @@ function LoginPage() {
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <h1 className="text-2xl sm:text-3xl font-bold">Login</h1>
         <LoginForm />
+        <Link href={'/signup'} className="text-md text-center font-semibold mx-auto">Sign Up</Link>
       </main>
       <Footer />
     </div>

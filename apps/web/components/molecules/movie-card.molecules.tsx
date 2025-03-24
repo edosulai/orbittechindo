@@ -5,12 +5,12 @@ import { MovieCardProps } from "@/types";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-export function MovieCard({ movie, handleMovieClick }: MovieCardProps) {
+export function MovieCard({ movie, handleMovieClick, className }: MovieCardProps) {
   const isValidImage = useValidImage(movie.Poster);
 
   return (
     <motion.div
-      className="flex flex-col items-center rounded-lg shadow-md p-2 cursor-pointer"
+      className={["flex flex-col items-center rounded-lg shadow-md p-2 cursor-pointer", className].join(" ")}
       onClick={() => handleMovieClick(movie.imdbID)}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}

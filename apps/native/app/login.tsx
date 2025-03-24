@@ -16,7 +16,7 @@ export default function LoginScreen() {
 
   return (
     <View style={tw`flex-1 items-center justify-between`}>
-      <View style={tw`gap-8 items-center justify-center py-60`}>
+      <View style={tw`gap-8 items-center justify-center pt-60`}>
         <Text style={tw`text-2xl font-bold`}>Login</Text>
         <LoginForm />
         <Pressable
@@ -26,7 +26,7 @@ export default function LoginScreen() {
           <Text style={tw`text-md font-semibold`}>Sign Up</Text>
         </Pressable>
       </View>
-      <Footer />
+      <Footer style={tw`mb-20`} />
     </View>
   );
 }

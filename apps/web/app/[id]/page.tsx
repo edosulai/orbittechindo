@@ -78,10 +78,10 @@ function MovieDetailPage() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-4 sm:p-8 md:p-12 lg:p-16 xl:p-20 gap-8 sm:gap-16">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Button onClick={handleBackClick} isLoading={isLoading}>
+        <Button onClick={handleBackClick} isLoading={isLoading} className="mr-auto">
           Back
         </Button>
-        <h1 className="text-2xl sm:text-3xl font-bold">{data.Title}</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold mr-auto">{data.Title}</h1>
         <div className="flex flex-col sm:flex-row gap-4">
           {isValidImage ? (
             <Image
@@ -89,7 +89,7 @@ function MovieDetailPage() {
               alt={data.Title}
               width={200}
               height={300}
-              className="rounded-lg shadow-md"
+              className="rounded-lg shadow-md w-full sm:w-auto"
             />
           ) : (
             <div className="w-[200px] h-[300px] flex items-center justify-center bg-gray-200 rounded-md">
@@ -115,8 +115,8 @@ function MovieDetailPage() {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-8">
-          <div>
+        <div className="flex flex-col sm:flex-row gap-8 w-full">
+          <div className="w-full">
             <h2 className="text-xl sm:text-2xl font-semibold mt-8 text-center">
               Genre Distribution
             </h2>
@@ -134,7 +134,7 @@ function MovieDetailPage() {
             </div>
           </div>
 
-          <div>
+          <div className="w-full">
             <h2 className="text-xl sm:text-2xl font-semibold mt-8 text-center">
               Ratings Distribution
             </h2>

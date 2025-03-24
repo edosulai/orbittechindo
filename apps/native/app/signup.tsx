@@ -26,7 +26,7 @@ export default function SignupScreen() {
           <Text style={tw`text-md font-semibold`}>Login</Text>
         </Pressable>
       </View>
-      <Footer />
+      <Footer style={tw`mb-20`} />
     </View>
   );
 }

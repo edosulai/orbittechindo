@@ -6,12 +6,12 @@ import { useAuthStore } from "@/stores";
 import { generateToken } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { Button, Input } from "../atoms";
 
 export function LoginForm() {
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>({
@@ -41,18 +41,35 @@ export function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <Input
-        type="text"
-        placeholder="Username"
-        value={MOCK_USER.email}
-        {...register("email")}
+      <Controller
+        control={control}
+        name="email"
+        defaultValue={MOCK_USER.email}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <Input
+            type="email"
+            placeholder="Username"
+            onBlur={onBlur}
+            onChange={onChange}
+            value={value}
+          />
+        )}
       />
       {errors.email && <p className="text-red-500">{errors.email.message}</p>}
-      <Input
-        type="password"
-        placeholder="Password"
-        value={MOCK_USER.password}
-        {...register("password")}
+      
+      <Controller
+        control={control}
+        name="password"
+        defaultValue={MOCK_USER.password}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <Input
+            type="password"
+            placeholder="Password"
+            onBlur={onBlur}
+            onChange={onChange}
+            value={value}
+          />
+        )}
       />
       {errors.password && (
         <p className="text-red-500">{errors.password.message}</p>

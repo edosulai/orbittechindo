@@ -2,6 +2,7 @@
 
 import { Footer, SignupForm } from "@/components";
 import { useProtectedRoute } from "@/hooks";
+import Link from "next/link";
 
 function SignupPage() {
   const { isAuthenticated, authIsLoading } = useProtectedRoute();
@@ -15,6 +16,7 @@ function SignupPage() {
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <h1 className="text-2xl sm:text-3xl font-bold">Sign Up</h1>
         <SignupForm />
+        <Link href={'/login'} className="text-md text-center font-semibold mx-auto">Login</Link>
       </main>
       <Footer />
     </div>

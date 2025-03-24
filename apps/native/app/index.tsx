@@ -18,6 +18,7 @@ import {
   NativeSyntheticEvent,
   Text,
   View,
+  Animated,
 } from "react-native";
 import RNCarousel from "react-native-reanimated-carousel";
 import tw from "twrnc";
@@ -38,6 +39,7 @@ export default function HomeScreen() {
   } = useMovieStore();
   const [movies, setMovies] = useState<MoviePoster[]>([]);
   const loadMoreRef = useRef(null);
+  const scrollY = useRef(new Animated.Value(0)).current;
 
   const {
     data,
@@ -119,6 +121,10 @@ export default function HomeScreen() {
     router.push(`/${imdbID}`);
   };
 
+  const handleAnimatedScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    handleScroll(event);
+  };
+
   return (
     <View style={tw`flex-1 bg-gray-100`}>
       <FormProvider {...methods}>
@@ -129,61 +135,67 @@ export default function HomeScreen() {
         />
       </FormProvider>
 
-      <RNCarousel
-        loop
-        width={Dimensions.get("window").width}
-        height={300}
-        data={movies.slice(0, 5)}
-        scrollAnimationDuration={1000}
-        mode="parallax"
-        containerStyle={tw`w-full items-center`}
-        modeConfig={{
-          parallaxScrollingScale: 0.9,
-          parallaxScrollingOffset: 270,
-          parallaxAdjacentItemScale: 0.8,
-        }}
-        renderItem={({ item: movie, index }) => {
-          return (
-            <MotiView
-              style={tw`flex-1 items-center`}
-              from={{ opacity: 0, translateY: 50 }}
-              animate={{ opacity: 1, translateY: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <MovieCard
-                movie={movie}
-                handleMovieClick={handleMovieClick}
-                style={tw`w-[200px] h-[300px]`}
-              />
-            </MotiView>
-          );
-        }}
-      />
-
-      <MasonryList
-        data={movies}
-        keyExtractor={(item, index) => index.toString()}
-        numColumns={2}
-        style={tw`items-center justify-center gap-4`}
-        contentContainerStyle={tw``}
-        onScroll={handleScroll}
+      <Animated.ScrollView
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: true, listener: handleAnimatedScroll }
+        )}
         scrollEventThrottle={16}
-        renderItem={({ item }) => {
-          return (
-            <MotiView
-              from={{ opacity: 0, translateY: 50 }}
-              animate={{ opacity: 1, translateY: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <MovieCard
-                movie={item as MoviePoster}
-                handleMovieClick={handleMovieClick}
-                style={tw`w-full mb-4`}
-              />
-            </MotiView>
-          );
-        }}
-      />
+      >
+        <RNCarousel
+          loop
+          width={Dimensions.get("window").width}
+          height={300}
+          data={movies.slice(0, 5)}
+          scrollAnimationDuration={1000}
+          mode="parallax"
+          containerStyle={tw`w-full items-center`}
+          modeConfig={{
+            parallaxScrollingScale: 0.9,
+            parallaxScrollingOffset: 270,
+            parallaxAdjacentItemScale: 0.8,
+          }}
+          renderItem={({ item: movie, index }) => {
+            return (
+              <MotiView
+                style={tw`flex-1 items-center`}
+                from={{ opacity: 0, translateY: 50 }}
+                animate={{ opacity: 1, translateY: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <MovieCard
+                  movie={movie}
+                  handleMovieClick={handleMovieClick}
+                  style={tw`w-[200px] h-[300px]`}
+                />
+              </MotiView>
+            );
+          }}
+        />
+
+        <MasonryList
+          data={movies}
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={2}
+          style={tw`items-center justify-center gap-4`}
+          contentContainerStyle={tw``}
+          renderItem={({ item }) => {
+            return (
+              <MotiView
+                from={{ opacity: 0, translateY: 50 }}
+                animate={{ opacity: 1, translateY: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <MovieCard
+                  movie={item as MoviePoster}
+                  handleMovieClick={handleMovieClick}
+                  style={tw`w-full h-[300px] mb-4`}
+                />
+              </MotiView>
+            );
+          }}
+        />
+      </Animated.ScrollView>
 
       {isLoading && <LoadingSpinner />}
       {error && <Text>{error.message}</Text>}
@@ -191,5 +203,3 @@ export default function HomeScreen() {
     </View>
   );
 }
-
-// export { default } from './demo';
